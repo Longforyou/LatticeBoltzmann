@@ -1,6 +1,8 @@
 #! /usr/bin/env julia
 
+module constants
 """
+
 This type contains a description of properties of the LBM simulation
 """
 type LBM_Constants
@@ -24,4 +26,8 @@ type LBM_Constants
       _phyx, _phyy)
   )
 end
+
+export LBM_Constants
+
+end # module constants
 

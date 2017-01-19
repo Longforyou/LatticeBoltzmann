@@ -1,7 +1,6 @@
 #! /usr/bin/env julia
 
 module velocity_set
-
 """
 This module contains definitions of types for referencing the different kinds of velocity fields.
 Example
