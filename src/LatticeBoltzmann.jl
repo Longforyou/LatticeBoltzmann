@@ -110,6 +110,35 @@ function step(lbm::LBM)
 
 end
 
+# ===============
+
+function compute_collision(lbm::LBM)
+
+  # The collision of the particles is indepentend of the particle type
+  lbm.grid.f_temp = collision(lbm.grid.f_prop, lbm.constants.omega, 
+                              lbm.grid.f_eq)
+
+end
+
+# =========== Propagations
+function compute_propagation(lbm::LBM)
+    for bound in lbm.propagation
+        boundary(lbm, bound)
+    end
+end
+
+# ===========
+# ==== Boundary Functions
+# ===========
+
+function compute_boundary(lbm::LBM)
+
+  for bound in lbm.bound
+    boundary(lbm, bound)
+  end
+end
+
+
 export Lattice_Boltzmann_2D, compute
 
 end # module

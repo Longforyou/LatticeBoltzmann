@@ -46,3 +46,72 @@ function compute_neumann(V::Velocity_Set._D2Q9.D2Q9,
 
   return f_i
 end
+
+# Neumann solution schemes for D2Q9
+function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9},
+                  bound::Neumann{North, NonEqBounce})
+  
+    for row in bound.rows, col in bound.cols
+      # Call the generic function
+      lbm.grid.f_temp[row, col, :] =
+          compute_neumann(lbm.grid.f_temp[row, col, :],
+                          bound.vel, [4, 7, 8], [2, 5, 6],
+                          [9, 1, 3], true )
+    end 
+
+    # Correct the velocity on the boundary
+    # lbm.grid.velocity[bound.rows, bound.cols, :] = bound.vel
+  
+end
+
+function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9}, 
+                  bound::Neumann{South, NonEqBounce})
+  
+  for row in bound.rows, col in bound.cols
+    # Call the generic function
+    lbm.grid.f_temp[row, col, :] =
+        compute_neumann(lbm.grid.f_temp[row, col, :],
+                        bound.vel, [2, 5, 6], [4, 7, 8],
+                        [9, 1, 3], false)
+  end
+ 
+  #Correct the velocity on the boundary
+  # lbm.grid.velocity[bound.rows, bound.cols, :] = bound.vel
+  
+
+end
+
+function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9}, 
+                  bound::Neumann{West, NonEqBounce})
+  
+    for row in bound.rows, col in bound.cols
+      # Call the generic function
+        lbm.grid.f_temp[row, col, :] =
+            compute_neumann(lbm.grid.f_temp[row, col, :],
+                            bound.vel, [3, 7, 6], [1, 5, 8],
+                            [9, 2, 4], false)
+    end
+ 
+    # Correct the velocity on the boundary
+    lbm.grid.velocity[bound.rows, bound.cols, :] = bound.vel
+  
+
+end
+
+function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9}, 
+                  bound::Neumann{East, NonEqBounce})
+ 
+  for row in bound.rows, col in bound.cols
+    # Call the generic function
+    lbm.grid.f_temp[row, col, :] =
+        compute_neumann(lbm.grid.f_temp[row, col, :],
+                        bound.vel, [1, 5, 8], [3, 7, 6],
+                        [9, 2, 4], true)
+   
+  end 
+  
+  # Correct the velocity on the boundary
+  # lbm.grid.velocity[bound.rows, bound.cols, :] = bound.vel
+
+end
+
