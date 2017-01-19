@@ -19,7 +19,8 @@ include("setup.jl")
 Compute the initial values of the grid. Gets called before the first normal
 iteration.
 """
-function init_lattice_state(lbm::Lattice_Boltzmann_2D{Cells.D2Q9},
+function init_lattice_state(lbm::LBM{velocity_set._2D, F<:Flow,
+                                     S <: Streaming, C <: Collision},
                             w::Array{Float64, 1})
 
   # The Initial values for the grid 
@@ -43,9 +44,12 @@ model specified by `lbm'. If `write_inc' is 0, only the first and last
 time_step are stored. Else every `write_inc' step is written into a 'vtr' file.
 
 """
-function compute(lbm::LBM, name::String, 
+function compute(lbm::LBM{V<:Velocity_Set, F<:Flow,
+                          S<:Streaming, C<:Collision},
+                 name::String,
                  time_step::Array{Float64}, write_inc::Int64=0)
 
+  # Setting the directory
   src_dir = pwd()
   vtk_dir = string(src_dir, "/vtk")
 
@@ -98,47 +102,17 @@ scheme.
   5. bounce backs on the values specified in all `BounceCondition' objects in
   `bound'
 """
-function step(lbm::LBM)
+function step(lbm::LBM{V <: Velocity_Set, F <: Flow,
+                       S <: Streaming, C <: Collision})
 
     compute_collision(lbm)
-    compute_propagation(lbm)
     compute_streaming(lbm)
-
     compute_boundary(lbm)
     compute_macro_var(lbm)
-    compute_f_eq(lbm, w, c_x, c_y)
+    compute_f_eq(lbm)
 
 end
 
-# ===============
-
-function compute_collision(lbm::LBM)
-
-  # The collision of the particles is indepentend of the particle type
-  lbm.grid.f_temp = collision(lbm.grid.f_prop, lbm.constants.omega, 
-                              lbm.grid.f_eq)
-
-end
-
-# =========== Propagations
-function compute_propagation(lbm::LBM)
-    for bound in lbm.propagation
-        boundary(lbm, bound)
-    end
-end
-
-# ===========
-# ==== Boundary Functions
-# ===========
-
-function compute_boundary(lbm::LBM)
-
-  for bound in lbm.bound
-    boundary(lbm, bound)
-  end
-end
-
-
-export Lattice_Boltzmann_2D, compute
+export compute
 
 end # module

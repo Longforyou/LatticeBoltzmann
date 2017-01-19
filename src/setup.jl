@@ -12,3 +12,7 @@ include("./streaming/streaming.jl")
 include("./collision/collision.jl")
 include("./analytical/analytical.jl")
 include("./flow/flow.jl")
+
+using Boundary, velocity_set, velocity_set._D2Q9
+
+export LBM_Incompressible, LBM_Comp

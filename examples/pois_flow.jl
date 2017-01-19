@@ -1,6 +1,6 @@
 #! /usr/bin/env Julia
 
-using Plots
+using Plots, LatticeBoltzmann
 pyplot()
 
 include("setup.jl")  # Load all modules
@@ -18,13 +18,13 @@ nu_luft = 153.2e-7; mu_luft = 12.205e-6
 rho_luft = 1.189
 
 # Create all objects for the LBM
-grid = Grid{Cells.D2Q9}(x, y, 9)
+grid = Grid{D2Q9}(x, y, 9)
 tau1 = sqrt(3/16) + 0.5
 consts_analyt = LBM_Constants(U, H, nu_luft, rho_luft,
                        L, H, tau1)
 
 # Function to generate all objects for one simulation
-function poiseuille(u::Float64, grid::Grid{Cells.D2Q9})
+function poiseuille(u::Float64, grid::Grid{D2Q9})
 
     consts = LBM_Constants(u, H,  nu_luft, rho_luft,
                          L, H, tau1)
@@ -32,22 +32,20 @@ function poiseuille(u::Float64, grid::Grid{Cells.D2Q9})
     println("Constants: ", consts)
 
     # Boundary conditions
-    const top_bound = Bounce{North}(Array{Int64}(1:x), [1])
-    const bottom_bound = Bounce{South}(Array{Int64}(1:x), [y])
+    const top_bound = Bounce{North, D2Q9}(Array{Int64}(1:x), [1])
+    const bottom_bound = Bounce{South, D2Q9}(Array{Int64}(1:x), [y])
 
     rho_out = rho_luft
     rho_in = rho_out + 3. * get_pressure_pois(consts)
     println("Rho_in: ", rho_in, "\n Rho_out: ", rho_out)
-    peri_pres = PeriodicPressure{West}(rho_in, rho_out, 1, Array{Int64}(1:y),
-                                 x, Array{Int64}(1:y))
+    peri_pres = PeriodicPressure{West, D2Q9}(rho_in, rho_out,
+                                             1, Array{Int64}(1:y),
+                                    x, Array{Int64}(1:y))
 
     bounds = Array{Boundary, 1}([top_bound, bottom_bound])
-                                 # corner_1, corner_2,
-                                 # corner_3, corner_4,
-                                 #inlet, outlet])
 
     props = Array{Boundary, 1}([peri_pres])
-    lbm = Lattice_Boltzmann_2D{Cells.D2Q9}(consts, grid, bounds, props)
+    lbm = LBM_Incompressible{D2Q9}(consts, grid, bounds, props)
 
     compute(lbm, "pois_", Array(1.:t), write_inc)
 

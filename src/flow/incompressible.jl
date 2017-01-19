@@ -11,11 +11,10 @@ type LBM_Incompressible{V, F, S, C} <: LBM{V<:Velocity_Set,
   constants::LBM_Constants
   grid::Grid{T}
   bound::Array{Boundary, 1} # For Bounces etc...
-  propagation::Array{Boundary, 1} # For Dirichlet Conditions
 
   Lattice_Boltzmann_2D(constants::LBM_Constants,
                        grid::Grid{T},
-                       bound::Array{Boundary, 1}, prop::Array{Boundary, 1}) =
-  new(constants, grid, bound, prop)
+                       bound::Array{Boundary, 1}) =
+    new(constants, grid, bound)
 
 end

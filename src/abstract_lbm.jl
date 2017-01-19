@@ -11,7 +11,8 @@ abstract Streaming
 abstract Velocity_Set
 abstract Flow
 
-abstract LBM{V<:Velocity_Set, F <: Flow, S <: Streaming, C <: Collision}
+abstract LBM{V<:Velocity_Set, F <: Flow,
+             S <: Streaming, C <: Collision}
 
 # Boundary conditions are modeled onto a LBM type, since the modify the LBM.
 

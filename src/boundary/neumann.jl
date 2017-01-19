@@ -10,7 +10,7 @@ type Neumann{T<:Direction, S<:SolType, V <: Velocity_Set} <: Boundary
 
 end
 
-function compute_neumann(V::Velocity_Set._D2Q9.D2Q9,
+function compute_neumann(V::velocity_set._D2Q9.D2Q9,
                          f_i::Array{Float64, 1},
                          vel::Float64,
                          pre_ind::Array{Int64, 1},
@@ -48,15 +48,17 @@ function compute_neumann(V::Velocity_Set._D2Q9.D2Q9,
 end
 
 # Neumann solution schemes for D2Q9
-function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9},
-                  bound::Neumann{North, NonEqBounce})
+function boundary(lbm::LBM{V <: velocity._2D.D2Q9, F <: Flow,
+                           S <: Streaming, C <: Collision},
+                  bound::Neumann{North, NonEqBounce,
+                                 velocity_set._2D.D2Q9})
   
     for row in bound.rows, col in bound.cols
       # Call the generic function
       lbm.grid.f_temp[row, col, :] =
-          compute_neumann(lbm.grid.f_temp[row, col, :],
-                          bound.vel, [4, 7, 8], [2, 5, 6],
-                          [9, 1, 3], true )
+          compute_neumann(V, lbm.grid.f_temp[row, col, :],
+                          bound.vel, [5, 8, 9], [3, 6, 7],
+                          [1, 2, 4], true )
     end 
 
     # Correct the velocity on the boundary
@@ -64,15 +66,17 @@ function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9},
   
 end
 
-function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9}, 
-                  bound::Neumann{South, NonEqBounce})
+function boundary(lbm::LBM{V <: velocity._2D.D2Q9, F <: Flow,
+                           S <: Streaming, C <: Collision},
+                  bound::Neumann{South, NonEqBounce,
+                                 velocity_set._2D.D2Q9})
   
   for row in bound.rows, col in bound.cols
     # Call the generic function
     lbm.grid.f_temp[row, col, :] =
-        compute_neumann(lbm.grid.f_temp[row, col, :],
-                        bound.vel, [2, 5, 6], [4, 7, 8],
-                        [9, 1, 3], false)
+        compute_neumann(V, lbm.grid.f_temp[row, col, :],
+                        bound.vel, [3, 6, 7], [5, 8, 9],
+                        [1, 2, 4], false)
   end
  
   #Correct the velocity on the boundary
@@ -81,15 +85,16 @@ function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9},
 
 end
 
-function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9}, 
-                  bound::Neumann{West, NonEqBounce})
+function boundary(lbm::LBM{V <: velocity._2D.D2Q9, F <: Flow, S <: Streaming, C <: Collision}, 
+                  bound::Neumann{West, NonEqBounce,
+                                 velocity_set._2D.D2Q9})
   
     for row in bound.rows, col in bound.cols
       # Call the generic function
         lbm.grid.f_temp[row, col, :] =
-            compute_neumann(lbm.grid.f_temp[row, col, :],
-                            bound.vel, [3, 7, 6], [1, 5, 8],
-                            [9, 2, 4], false)
+            compute_neumann(V, lbm.grid.f_temp[row, col, :],
+                            bound.vel, [4, 8, 6], [2, 6, 9],
+                            [1, 3, 5], false)
     end
  
     # Correct the velocity on the boundary
@@ -98,15 +103,17 @@ function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9},
 
 end
 
-function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9}, 
-                  bound::Neumann{East, NonEqBounce})
+function boundary(lbm::LBM{V <: velocity._2D.D2Q9, F <: Flow,
+                           S <: Streaming, C <: Collision},
+                  bound::Neumann{East, NonEqBounce,
+                                 velocity_set._2D.D2Q9})
  
   for row in bound.rows, col in bound.cols
     # Call the generic function
     lbm.grid.f_temp[row, col, :] =
-        compute_neumann(lbm.grid.f_temp[row, col, :],
-                        bound.vel, [1, 5, 8], [3, 7, 6],
-                        [9, 2, 4], true)
+        compute_neumann(V, lbm.grid.f_temp[row, col, :],
+                        bound.vel, [2, 6, 9], [4, 8, 7],
+                        [1, 3, 5], true)
    
   end 
   

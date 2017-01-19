@@ -4,16 +4,17 @@
 # ======= Pressure Dirichlet Conditions
 abstract Dirichlet <: Boundary
 
-type Pressure{T <: Direction, S <: SolType, V<:Velocity_Set} <: Boundary
+type Pressure{T <: Direction, S <: SolType,
+              V <: velocity_set} <: Boundary
   rho::Float64
   rows::Array{Int64, 1}
   cols::Array{Int64, 1}
-   
 
 end
 
-function compute_dirichlet(V::D2Q9, f_i::Array{Float64, 1}, rho::Float64,
-                           pre_ind::Array{Int64, 1}, 
+function compute_dirichlet(V::velocity._D2Q9.D2Q9,
+                           f_i::Array{Float64, 1},
+                           rho::Float64, pre_ind::Array{Int64, 1}, 
                            post_ind::Array{Int64, 1},
                            rho_ind::Array{Int64, 1}, sign::Bool)
 
@@ -42,55 +43,63 @@ end
 # ===========================================================
 # === Dirichlet(Pressure) solution schemes
 # ===========================================================
-function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9},
-                  bound::Pressure{North, NonEqBounce})
+function boundary(lbm::LBM{V <: velocity_set._D2Q9.D2Q9, F <: Flow,
+                           S <: Streaming, C <: Collision},
+                  bound::Pressure{North, NonEqBounce,
+                                  velocity_set._D2Q9.D2Q9})
   
   for row in bound.rows, col in bound.cols
     # Call the generitc function
     lbm.grid.f_temp[row, col, :] =
-        compute_dirichlet(lbm.grid.f_temp[row, col, :],
-                          bound.rho, [4, 7, 8], [2, 5, 6],
-                          [9, 1, 3], true )
+        compute_dirichlet(V, lbm.grid.f_temp[row, col, :],
+                          bound.rho, [5, 8, 9], [3, 6, 7],
+                          [1, 2, 4], true )
   end 
   
 end
 
-function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9}, 
-                  bound::Pressure{South, NonEqBounce})
+function boundary(lbm::LBM{V <: velocity_set._D2Q9.D2Q9, F <: Flow,
+                           S <: Streaming, C <: Collision}, 
+                  bound::Pressure{South, NonEqBounce,
+                                  velocity_set._D2Q9.D2Q9})
   
   for row in bound.rows, col in bound.cols
-    # Call the generic function
+      # Call the generic function
       lbm.grid.f_temp[row, col, :] =
-          compute_dirichlet(lbm.grid.f_temp[row, col, :],
-                            bound.rho, [2, 5, 6], [4, 7, 8],
-                            [9, 1, 3], true)
+          compute_dirichlet(V, lbm.grid.f_temp[row, col, :],
+                            bound.rho, [3, 6, 7], [5, 8, 9],
+                            [1, 2, 4], true)
   end
 
 end
 
-function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9}, 
-                  bound::Pressure{West, NonEqBounce})
+function boundary(lbm::LBM{V <: velocity_set._D2Q9.D2Q9, F <: Flow,
+                           S <: Streaming, C <: Collision},
+                  bound::Pressure{West, NonEqBounce,
+                                  velocity_set._D2Q9.D2Q9})
 
 
     for row in bound.rows, col in bound.cols
     # Call the generic function
       lbm.grid.f_temp[row, col, :] =
-          compute_dirichlet(lbm.grid.f_temp[row, col, :],
-                            bound.rho, [3, 7, 6], [1, 5, 8],
-                            [9, 2, 4], false)
+          compute_dirichlet(V, lbm.grid.f_temp[row, col, :],
+                            bound.rho, [4, 8, 7], [2, 6, 9],
+                            [1, 3, 5], false)
   end
 
 end
 
-function boundary(lbm::Lattice_Boltzmann_2D{Cells.D2Q9}, 
-                  bound::Pressure{East, NonEqBounce})
+function boundary(lbm::LBM{V <: velocity_set._D2Q9.D2Q9, F <: Flow,
+                           S <: Streaming, C <: Collision},
+                  bound::Pressure{East, NonEqBounce,
+                                  velocity_set._D2Q9.D2Q9})
 
   for row in bound.rows, col in bound.cols
-    # Call the generic function
-    lbm.grid.f_temp[row, col, :] =
-        compute_dirichlet(lbm.grid.f_temp[row, col, :],
-                          bound.rho, [1, 5, 8], [3, 7, 6],
-                          [9, 2, 4], true)
+      # Call the generic function
+      lbm.grid.f_temp[row, col, :] =
+          compute_dirichlet(V, lbm.grid.f_temp[row, col, :],
+                              bound.rho, [2, 6, 9], [4, 8, 7],
+                              [1, 3, 5], true)
    
   end 
   

@@ -13,6 +13,18 @@ abstract NonEq <: SolType
 abstract NonEqBounce <: SolType
 abstract BounceCondition <: Boundary
 
+# ===========
+# ==== Boundary Function
+# ===========
+
+function compute_boundary(lbm::LBM{V <: Velocity_Set, F <: Flow,
+                                   S <: Streaming, C <: Collision})
+
+    for bound in lbm.bound
+        boundary(lbm, bound)
+    end
+end
+
 include("neumann.jl")
 include("dirichlet.jl")
 include("open.jl")

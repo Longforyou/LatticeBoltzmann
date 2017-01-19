@@ -1,10 +1,10 @@
 #! /usr/bin/env julia
 
 abstract FullPeriodicStreaming <: Streaming
+abstract InnerStreaming <: Streaming
 
 # =========== Steaming
-
-function compute_streaming(lbm::Lattice_Boltzmann_2D{Cells.D2Q9})
+function compute_streaming(lbm::LBM{V <: velocity_set._D2Q9.D2Q9, F <: Flow, S <: Streaming, C <: Collision})
 
   # Distribution direction
   lbm.grid.f_prop[:, :, 1] = circshift(lbm.grid.f_temp[:, : ,1],[ 0  1])
