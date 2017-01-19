@@ -3,7 +3,7 @@
 module _D2Q9
 
   using velocity_set
-  abstract D2Q9 <: Particle
+  abstract D2Q9 <: Veloctiy_Set
 
     # Some constant fields
     const c_x = Array{Float64,1}([0., 1., 0., -1., 0., 1., -1., -1., 1.])
