@@ -1,5 +1,8 @@
 #! /usr/bin/env julia
 
+"""
+This type contains a description of properties of the LBM simulation
+"""
 type LBM_Constants
  
   U::Float64   # Maximal Velocity
@@ -22,21 +25,3 @@ type LBM_Constants
   )
 end
 
-function get_rho(press::Float64)
-  3 * press
-end
-
-function get_pressure_pois(consts::LBM_Constants)
-  32. * consts.nu_F * consts.rho_F * consts.phys_x * consts.U / (consts.phys_y ^ 2) 
-end
-
-function get_velo_pois(L::Float64,
-                       H::Float64,
-                       consts::LBM_Constants, y::Array{Float64, 1})
-
-    pres = get_pressure_pois(consts)
-    pres ./ (2. * consts.nu * consts.rho_F *
-              L) .* y .* (H - y)
-              #-4. .* (consts.U / H^2) * .* y .* (H-y)
-
-end

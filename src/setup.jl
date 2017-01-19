@@ -1,9 +1,14 @@
 #!/usr/bin/env julia
 
-include("constants.jl")
-include("boundary.jl")
-include("particle.jl")
-include("gitter.jl")
-include("lattice_boltzmann.jl")
-
-using Cells
+"""
+This file contains the inclusion of all paths
+"""
+include("./constants/constants.jl")
+include("./boundary/boundary.jl")
+include("./velocity_sets/velocity_set.jl")
+include("./grid/grid.jl")
+include("./io/output.jl")
+include("./streaming/streaming.jl")
+include("./collision/collision.jl")
+include("./analytical/analytical.jl")
+include("./flow/flow.jl")

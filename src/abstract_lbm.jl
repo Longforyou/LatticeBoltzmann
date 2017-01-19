@@ -15,3 +15,10 @@ abstract LBM{V<:Velocity_Set, F <: Flow, S <: Streaming, C <: Collision}
 
 # Boundary conditions are modeled onto a LBM type, since the modify the LBM.
 
+# Direction 
+abstract Direction
+abstract North <: Direction
+abstract South <: Direction
+abstract West <: Direction
+abstract East <: Direction
+
