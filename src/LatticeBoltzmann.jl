@@ -4,8 +4,6 @@ module LatticeBoltzmann
 
 using  ProgressMeter, WriteVTK
 
-# Process the abstract modelling
-include("abstract_lbm.jl")
 
 # Process all other files
 include("setup.jl")

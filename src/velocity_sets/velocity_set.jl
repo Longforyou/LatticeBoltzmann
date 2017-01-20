@@ -1,8 +1,11 @@
 #! /usr/bin/env julia
 
 module velocity_set
+
+using Abstract_LBM
 """
-This module contains definitions of types for referencing the different kinds of velocity fields.
+This module contains definitions of types for referencing
+the different kinds of velocity fields.
 Example
 -------
 using velocity_set._D2Q9

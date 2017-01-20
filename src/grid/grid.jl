@@ -1,8 +1,8 @@
 #! /usr/bin/env julia
 
-using Cells
+using Abstract_LBM
 
-type Grid{T<:Cells.Particle}
+type Grid{V <: Velocity_Set}
     f_prop::Array{Float64, 3}
     width::Int64
     length::Int64

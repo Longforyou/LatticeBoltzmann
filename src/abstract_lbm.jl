@@ -23,6 +23,7 @@ abstract West <: Direction
 abstract East <: Direction
 
 export
+    LBM
     Collision,
     Streaming,
     Velocity_Set,
