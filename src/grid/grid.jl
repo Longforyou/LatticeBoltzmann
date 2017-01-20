@@ -3,6 +3,7 @@
 using Abstract_LBM
 
 type Grid{V <: Velocity_Set}
+
     f_prop::Array{Float64, 3}
     width::Int64
     length::Int64

@@ -4,14 +4,17 @@
 include("abstract_lbm.jl")
 using .Abstract_LBM
 
-include("./constants/constants.jl")
-include("./io/output.jl")
-include("./streaming/streaming.jl")
-include("./collision/collision.jl")
-include("./analytical/analytical.jl")
-include("./flow/flow.jl")
-include("./velocity_sets/velocity_set.jl")
-include("./grid/grid.jl")
-include("./boundary/boundary.jl")
+include("constants/constants.jl")
+using .constants
 
-using velocity_set, velocity_set._D2Q9
+include("io/output.jl")
+include("velocity_sets/velocity_set.jl")
+using ._D2Q9.D2Q9
+
+include("streaming/streaming.jl")
+include("collision/collision.jl")
+include("analytical/analytical.jl")
+include("flow/flow.jl")
+include("grid/grid.jl")
+include("boundary/boundary.jl")
+

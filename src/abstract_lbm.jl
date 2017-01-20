@@ -22,11 +22,16 @@ abstract South <: Direction
 abstract West <: Direction
 abstract East <: Direction
 
+abstract _1D <: Velocity_Set
+abstract _2D <: Velocity_Set
+abstract _3D <: Velocity_Set
+
 export
-    LBM
+    LBM,
     Collision,
     Streaming,
     Velocity_Set,
+    _1D,_2D, _3D,
     Flow, Direction,
     North, South,
     West, East
