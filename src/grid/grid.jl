@@ -1,6 +1,6 @@
 #! /usr/bin/env julia
 
-using Abstract_LBM
+using .Abstract_LBM
 
 type Grid{V <: Velocity_Set}
 

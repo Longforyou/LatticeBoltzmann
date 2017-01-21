@@ -26,6 +26,9 @@ abstract _1D <: Velocity_Set
 abstract _2D <: Velocity_Set
 abstract _3D <: Velocity_Set
 
+abstract Compressible <: Flow
+abstract Incompressible <: Flow
+
 export
     LBM,
     Collision,
@@ -34,6 +37,7 @@ export
     _1D,_2D, _3D,
     Flow, Direction,
     North, South,
-    West, East
+    West, East,
+    Compressible, Incompressible
 
 end # module Abstract_LBM

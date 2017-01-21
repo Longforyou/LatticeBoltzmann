@@ -15,8 +15,8 @@ include("setup.jl")
 Compute the initial values of the grid. Gets called before the first normal
 iteration.
 """
-function init_lattice_state(lbm::LBM{velocity_set._2D, F<:Flow,
-                                     S <: Streaming, C <: Collision},
+function init_lattice_state(lbm::LBM{_2D, Flow,
+                                     Streaming, Collision},
                             w::Array{Float64, 1})
 
   # The Initial values for the grid 
@@ -40,8 +40,8 @@ model specified by `lbm'. If `write_inc' is 0, only the first and last
 time_step are stored. Else every `write_inc' step is written into a 'vtr' file.
 
 """
-function compute(lbm::LBM{V<:Velocity_Set, F<:Flow,
-                          S<:Streaming, C<:Collision},
+function compute(lbm::LBM{Velocity_Set, Flow,
+                          Streaming, Collision},
                  name::String,
                  time_step::Array{Float64}, write_inc::Int64=0)
 
@@ -98,8 +98,8 @@ scheme.
   5. bounce backs on the values specified in all `BounceCondition' objects in
   `bound'
 """
-function step(lbm::LBM{V <: Velocity_Set, F <: Flow,
-                       S <: Streaming, C <: Collision})
+function step(lbm::LBM{Velocity_Set, Flow,
+                       Streaming, Collision})
 
     compute_collision(lbm)
     compute_streaming(lbm)

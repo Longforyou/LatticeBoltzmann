@@ -1,27 +1,26 @@
 
 # The corners are modelling different quadrant for the grid. By the type of the
 # corner 1 - 4
-type Corner{V <: velocity_set._D2Q9} <: Boundary
+type Corner{V <: _2D} <: Boundary
 
   row::Int64
   col::Int64
   quadrant::UInt8
   rho::Float64 # Specifies density/ pressure at the corner
 
-  Corner{V}(row, col, quad, rho) =
-    (
-     assert(quad in Array{UInt8}([1, 2, 3, 4])); # Check the quadrant
-     new(row, col, quad, rho)
-    )
+  # Corner{V}(row, col, quad, rho) =
+  #   (
+  #    assert(quad in Array{UInt8}([1, 2, 3, 4])); # Check the quadrant
+  #    new(row, col, quad, rho)
+  #  )
 end
 
 # ============================================================
 # ==== Corners
 # ============================================================
 # TODO Change the indices
-function boundary(lbm::LBM{V <: velocity_set._D2Q9.D2Q9, F <: Flow,
-                           S <: Streaming, C <: Collision}
-                  bound::Corner{V})
+function boundary(lbm::LBM{D2Q9, Flow, Streaming, Collision},
+                  bound::Corner{D2Q9})
 
   for row in bound.row, col in bound.col
     # Convenience pointer
