@@ -1,9 +1,12 @@
 #! /usr/bin/env Julia
 
-using Plots, LatticeBoltzmann
-pyplot()
+using Plots
+using LatticeBoltzmann:
+    D2Q9, North, South, West, East, Boundary, PeriodicPressure, Incompressible,
+    LBM_Incompressible, LBM_Constants, Grid, Bounce, BGK, FullPeriodicStreaming,
+    compute, get_pressure_pois, Collision
 
-include("setup.jl")  # Load all modules
+pyplot()
 
 # Grid example
 scale = 10
@@ -45,7 +48,9 @@ function poiseuille(u::Float64, grid::Grid{D2Q9})
     bounds = Array{Boundary, 1}([top_bound, bottom_bound])
 
     props = Array{Boundary, 1}([peri_pres])
-    lbm = LBM_Incompressible{D2Q9}(consts, grid, bounds, props)
+    lbm = LBM_Incompressible{D2Q9, Incompressible,
+                             FullPeriodicStreaming,
+                             Collision}(consts, grid, bounds)
 
     compute(lbm, "pois_", Array(1.:t), write_inc)
 

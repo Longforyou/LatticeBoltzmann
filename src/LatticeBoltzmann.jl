@@ -28,7 +28,6 @@ function init_lattice_state(lbm::LBM{_2D, Flow,
   lbm.grid.f_prop = copy(lbm.grid.f_eq)
   compute_macro_var(lbm)
 
-
 end
 
 # ===========
@@ -40,8 +39,9 @@ model specified by `lbm'. If `write_inc' is 0, only the first and last
 time_step are stored. Else every `write_inc' step is written into a 'vtr' file.
 
 """
-function compute(lbm::LBM{Velocity_Set, Flow,
-                          Streaming, Collision},
+function compute(lbm::LBM,
+                 # {Velocity_Set, Flow,
+                 #          Streaming, Collision},
                  name::String,
                  time_step::Array{Float64}, write_inc::Int64=0)
 
@@ -98,8 +98,7 @@ scheme.
   5. bounce backs on the values specified in all `BounceCondition' objects in
   `bound'
 """
-function step(lbm::LBM{Velocity_Set, Flow,
-                       Streaming, Collision})
+function step(lbm::LBM)
 
     compute_collision(lbm)
     compute_streaming(lbm)

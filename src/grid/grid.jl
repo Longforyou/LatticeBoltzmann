@@ -61,3 +61,4 @@ function get_axis_vec(grid::Grid, consts::LBM_Constants)
   return x, y
 
 end
+

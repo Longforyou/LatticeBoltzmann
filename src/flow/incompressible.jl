@@ -1,19 +1,21 @@
 #! /usr/bin/env julia
 
 # Type definition for the lattice boltzmann 2D mesh
-type LBM_Incompressible <: LBM{Abstract_LBM.Velocity_Set,
-                               Incompressible,
-                               Streaming,
-                               Collision}
+type LBM_Incompressible{Velocity_Set,
+                        Flow, Streaming, Collision}<: LBM
+    # {V::Abstract_LBM.Velocity_Set,
+    #                                       F::Incompressible,
+    #                                       S::Streaming,
+    #                                       C::Collision}
     
     constants::LBM_Constants
-    grid::Grid{Abstract_LBM.Velocity_Set}
+    grid::Grid{Velocity_Set}
     bound::Array{Boundary, 1} # For Bounces etc...
 
-    LBM_Incompressible(constants::LBM_Constants,
-                       grid::Grid{Abstract_LBM.Velocity_Set},
-                       bound::Array{Boundary, 1}) =
-                           new(constants, grid, bound)
+    # LBM_Incompressible(constants::LBM_Constants,
+    #                    grid::Grid{Abstract_LBM.Velocity_Set},
+    #                    bound::Array{Boundary, 1}) =
+    #                        new(constants, grid, bound)
 
 end
 

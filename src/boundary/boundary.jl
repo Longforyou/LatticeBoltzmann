@@ -37,4 +37,5 @@ export
     Neumann,
     Dirichlet,
     Bounce,
-    Corner
+    Corner,
+    OpenBounce
