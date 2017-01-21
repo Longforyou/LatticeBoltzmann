@@ -12,10 +12,10 @@ include("velocity_sets/velocity_set.jl")
 using ._D2Q9
 include("boundary/boundary.jl")
 
+include("flow/flow.jl")
 include("streaming/streaming.jl")
 include("collision/collision.jl")
 include("analytical/analytical.jl")
-include("flow/flow.jl")
 
 # Export all values
 

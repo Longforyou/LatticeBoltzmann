@@ -18,3 +18,4 @@ function compute_macro_var(lbm::LBM{_2D, Flow,
     end
 
 end
+

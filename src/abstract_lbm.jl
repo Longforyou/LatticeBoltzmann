@@ -28,6 +28,10 @@ abstract _3D <: Velocity_Set
 
 abstract Compressible <: Flow
 abstract Incompressible <: Flow
+abstract FullPeriodicStreaming <: Streaming
+abstract InnerStreaming <: Streaming
+
+abstract BGK <: Collision
 
 export
     LBM,
@@ -38,6 +42,8 @@ export
     Flow, Direction,
     North, South,
     West, East,
-    Compressible, Incompressible
+    Compressible, Incompressible,
+    FullPeriodicStreaming,
+    InnerStreaming, BGK
 
 end # module Abstract_LBM

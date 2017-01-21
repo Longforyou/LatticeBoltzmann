@@ -50,7 +50,7 @@ function poiseuille(u::Float64, grid::Grid{D2Q9})
     props = Array{Boundary, 1}([peri_pres])
     lbm = LBM_Incompressible{D2Q9, Incompressible,
                              FullPeriodicStreaming,
-                             Collision}(consts, grid, bounds)
+                             BGK}(consts, grid, bounds)
 
     compute(lbm, "pois_", Array(1.:t), write_inc)
 

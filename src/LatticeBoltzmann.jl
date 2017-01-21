@@ -15,11 +15,11 @@ include("setup.jl")
 Compute the initial values of the grid. Gets called before the first normal
 iteration.
 """
-function init_lattice_state(lbm::LBM{_2D, Flow,
-                                     Streaming, Collision},
-                            w::Array{Float64, 1})
+function init_lattice_state(lbm::LBM{D2Q9, Flow,
+                                     Streaming, Collision})
 
-  # The Initial values for the grid 
+
+  #The Initial values for the grid
   for k in 1:lbm.grid.directions, i in 1:lbm.grid.width, j in 1:lbm.grid.length 
     lbm.grid.f_eq[i, j, k] = copy(w[k])
   end
@@ -53,7 +53,7 @@ function compute(lbm::LBM,
   progress = Progress(length(time_step), 1, "Computing...", 30)
   
   println("INITIALISE LATTICE NODES...")
-  init_lattice_state(lbm, w)
+  init_lattice_state(lbm)
 
   i = 1
   write_vtk(lbm, name, i)
