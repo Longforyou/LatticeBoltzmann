@@ -1,25 +1,41 @@
 #! /usr/bin/env julia
 
+immutable FullPeriodicStreaming_2D <: Streaming
+    rows::Array{Int64, 1}
+    cols::Array{Int64, 1}
 
-abstract FullPeriodicStreaming <: Streaming
+    function FullPeriodicStreaming_2D(grid::Grid_2D)
+        new(Array{Int64, 1}(1:grid.width),
+            Array{Int64, 1}(1:grid.length))
+    end
+
+end
+
 abstract InnerStreaming <: Streaming
 
-# =========== Steaming
-function compute_streaming(lbm::LBM{_D2Q9.D2Q9,
-                                    Flow,
-                                    FullPeriodicStreaming,
-                                    Collision})
+# =========== Streaming
+function compute_streaming(grid::Grid_2D{D2Q9},
+                           stream::FullPeriodicStreaming_2D)
 
  / # Distribution direction
-  lbm.grid.f_prop[:, :, 1] = circshift(lbm.grid.f_temp[:, : ,1],[ 0  1])
-  lbm.grid.f_prop[:, :, 2] = circshift(lbm.grid.f_temp[:, :, 2],[ 1  0])
-  lbm.grid.f_prop[:, :, 3] = circshift(lbm.grid.f_temp[:, :, 3],[ 0 -1])
-  lbm.grid.f_prop[:, :, 4] = circshift(lbm.grid.f_temp[:, :, 4],[-1  0])
-  lbm.grid.f_prop[:, :, 5] = circshift(lbm.grid.f_temp[:, :, 5],[ 1  1])
-  lbm.grid.f_prop[:, :, 6] = circshift(lbm.grid.f_temp[:, :, 6],[ 1 -1])
-  lbm.grid.f_prop[:, :, 7] = circshift(lbm.grid.f_temp[:, :, 7],[-1 -1])
-  lbm.grid.f_prop[:, :, 8] = circshift(lbm.grid.f_temp[:, :, 8],[-1  1])
-  lbm.grid.f_prop[:, :, 9] = lbm.grid.f_temp[:, :, 9]
+    grid.f_prop[stream.rows, stream.cols, 1] =
+        circshift( grid.f_temp[:, : ,1],[ 0  1])
+    grid.f_prop[stream.rows, stream.cols, 2] =
+        circshift( grid.f_temp[stream.rows, stream.cols, 2],[ 1  0])
+    grid.f_prop[stream.rows, stream.cols, 3] =
+        circshift( grid.f_temp[stream.rows, stream.cols, 3],[ 0 -1])
+    grid.f_prop[stream.rows, stream.cols, 4] =
+        circshift( grid.f_temp[stream.rows, stream.cols, 4],[-1  0])
+    grid.f_prop[stream.rows, stream.cols, 5] =
+        circshift( grid.f_temp[stream.rows, stream.cols, 5],[ 1  1])
+    grid.f_prop[stream.rows, stream.cols, 6] =
+        circshift( grid.f_temp[stream.rows, stream.cols, 6],[ 1 -1])
+    grid.f_prop[stream.rows, stream.cols, 7] =
+        circshift( grid.f_temp[stream.rows, stream.cols, 7],[-1 -1])
+    grid.f_prop[stream.rows, stream.cols, 8] =
+        circshift( grid.f_temp[stream.rows, stream.cols, 8],[-1  1])
+    grid.f_prop[stream.rows, stream.cols, 9] =
+        grid.f_temp[stream.rows, stream.cols, 9]
   
 end
 

@@ -2,28 +2,31 @@
 
 using .Abstract_LBM
 
-type Grid{V <: Velocity_Set}
+type Grid_2D{V <: Velocity_Set}
 
-    f_prop::Array{Float64, 3}
+    x_point::Array{Float64, 1}
+    y_point::Array{Float64, 1}
     width::Int64
     length::Int64
     directions::Int64
+    f_prop::Array{Float64, 3}
     f_eq::Array{Float64, 3}
     density::Array{Float64,2}
     velocity::Array{Float64,3}
     f_temp::Array{Float64, 3}
 
+    Grid_2D(consts, width, length, directions) =
+        (
+            x, y = get_axis_vec(width, length, consts);
+            f_prop = zeros(width, length, directions);
+            density = zeros(width, length); # Init with ones
+            velocity = zeros(width, length, 2);
+            f_eq = zeros(width, length, directions);
+            f_temp = zeros(width, length, directions);
 
-    Grid(width, length, directions) =
-    (f_prop = zeros(width, length, directions);
-     density = zeros(width, length); # Init with ones
-     velocity = zeros(width, length, 2);
-     f_eq = zeros(width, length, directions);
-     f_temp = zeros(width, length, directions);
-
-     new(f_prop, width, length, directions, 
-        f_eq, density, velocity, f_temp);
-    )
+            new(x, y, width, length, directions, f_prop,  
+                f_eq, density, velocity, f_temp);
+        )
 end
 
 function getNeighbours(grid::Grid, i::Int, j::Int)
@@ -54,9 +57,9 @@ function get_next_index(grid::Grid, i::Int64, dir::Int64, c_s_i::Int64)
     return i_n
 end
 
-function get_axis_vec(grid::Grid, consts::LBM_Constants)
-  x = linspace(0, grid.width, grid.width) * consts.phys_x / grid.width
-  y = linspace(0, grid.length, grid.length) * consts.phys_y /grid.length
+function get_axis_vec(width, length, consts::LBM_Constants)
+  x = linspace(0, width, width) * consts.phys_x / width
+  y = linspace(0, length, length) * consts.phys_y / length
 
   return x, y
 
