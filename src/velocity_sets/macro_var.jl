@@ -8,12 +8,31 @@ function density(f_prop::Array{Float64, 1})
     return sum(f_prop)
 end
 
-function compute_macro_var(lbm::LBM{_2D, Flow,
-                                    Streaming, Collision}) 
+function compute_macro_var(grid::Grid_2D{_2D, Flow}) 
 
-    for i in 1:lbm.grid.width, j in 1:lbm.grid.length
-        lbm.grid.density[i,j] = density(lbm.grid.f_prop[i,j, :])
-        lbm.grid.velocity[i, j, :] = velo(_2D, lbm.grid.f_prop[i,j,:])
+    for i in 1:grid.width, j in 1:grid.length
+         grid.density[i,j] = density( grid.f_prop[i,j, :])
+         grid.velocity[i, j, :] = _D2Q9.velo(grid.f_prop[i,j,:])
+
+    end
+
+end
+
+@acc function compute_macro_var(grid::Grid_2D{D2Q9, Compressible})
+
+    for i in 1:grid.width, j in 1:grid.length
+         grid.density[i,j] = density( grid.f_prop[i,j, :])
+         grid.velocity[i, j, :] = _D2Q9.velo(grid.f_prop[i,j,:])
+
+    end
+
+end
+
+function compute_macro_var(grid::Grid_2D{D2Q9, Incompressible})
+
+    for i in 1:grid.width, j in 1:grid.length
+         grid.density[i,j] = density( grid.f_prop[i,j, :])
+         grid.velocity[i, j, :] = _D2Q9.velo(grid.f_prop[i,j,:])
 
     end
 

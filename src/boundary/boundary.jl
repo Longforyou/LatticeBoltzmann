@@ -18,11 +18,10 @@ abstract BounceCondition <: Boundary
 # ==== Boundary Function
 # ===========
 
-function compute_boundary(lbm::LBM{Velocity_Set, Flow,
-                                   Streaming, Collision})
+function compute_boundary(grid::Grid, bound::Array{Boundary, 1})
 
-    for bound in lbm.bound
-        boundary(lbm, bound)
+    for b in bound
+        boundary(grid, b)
     end
 end
 
@@ -31,9 +30,10 @@ include("dirichlet.jl")
 include("open.jl")
 include("bounce.jl")
 include("corner.jl")
-include("periodic_dirichlet.jl")
+# include("periodic_dirichlet.jl")
 
 export
+    Boundary,
     Neumann,
     Dirichlet,
     Bounce,

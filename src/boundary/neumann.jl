@@ -13,8 +13,7 @@ immutable Neumann{T<:Direction, S<:SolType,
 end
 
 # Define a functor for the bondary
-function (V::Neumann{Direction,
-                     NonEqBounce, D2Q9})(f_i::Array{Float64, 1},
+function (V::Neumann{Direction, NonEqBounce, D2Q9})(f_i::Array{Float64, 1},
                         vel_ind::Array{Int64, 1},
                         pre_ind::Array{Int64, 1},
                         post_ind::Array{Int64, 1},
@@ -50,9 +49,7 @@ function (V::Neumann{Direction,
 end
 
 # Neumann solution schemes for D2Q9
-function boundary(lbm::LBM{D2Q9, Flow,
-                           Streaming, Collision},
-                  bound::Neumann{North, NonEqBounce,
+function boundary(grid::Grid_2D, bound::Neumann{North, NonEqBounce,
                                  D2Q9})
   
     for row in bound.rows, col in bound.cols
@@ -68,9 +65,7 @@ function boundary(lbm::LBM{D2Q9, Flow,
   
 end
 
-function boundary(lbm::LBM{D2Q9, Flow,
-                           Streaming, Collision},
-                  bound::Neumann{South, NonEqBounce,
+function boundary(grid::Grid_2D, bound::Neumann{South, NonEqBounce,
                                  D2Q9})
   
   for row in bound.rows, col in bound.cols
@@ -87,9 +82,7 @@ function boundary(lbm::LBM{D2Q9, Flow,
 
 end
 
-function boundary(lbm::LBM{D2Q9, Flow,
-                           Streaming, Collision},
-                  bound::Neumann{West, NonEqBounce,
+function boundary(grid::Grid_2D, bound::Neumann{West, NonEqBounce,
                                  D2Q9})
   
     for row in bound.rows, col in bound.cols
@@ -106,8 +99,7 @@ function boundary(lbm::LBM{D2Q9, Flow,
 
 end
 
-function boundary(lbm::LBM{D2Q9, Flow,
-                           Streaming, Collision},
+function boundary(grid::Grid_2D, 
                   bound::Neumann{Direction, NonEqBounce,
                                  D2Q9})
  

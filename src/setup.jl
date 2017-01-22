@@ -2,14 +2,23 @@
 
 # Process the abstract modelling
 include("abstract_lbm.jl")
-importall .Abstract_LBM
+using .Abstract_LBM
+export
+    Collision,
+    Streaming,
+    Grid, Velocity_Set,
+    _1D,_2D, _3D,
+    Flow, Direction,
+    North, South,
+    West, East,
+    Compressible, Incompressible
+
 
 include("constants/constants.jl")
+include("grid/grid.jl")
 
 include("io/output.jl")
-include("grid/grid.jl")
 include("velocity_sets/velocity_set.jl")
-using ._D2Q9
 include("boundary/boundary.jl")
 
 include("flow/flow.jl")
