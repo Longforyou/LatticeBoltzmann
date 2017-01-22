@@ -2,7 +2,7 @@
 
 using .Abstract_LBM
 
-type Grid_2D{V <: Velocity_Set}
+type Grid_2D{V <: _2D, F <: Flow} <: Grid
 
     x_point::Array{Float64, 1}
     y_point::Array{Float64, 1}
@@ -15,15 +15,15 @@ type Grid_2D{V <: Velocity_Set}
     velocity::Array{Float64,3}
     f_temp::Array{Float64, 3}
 
-    Grid_2D(consts, width, length, directions) =
+    Grid_2D(consts::LBM_Constants, width::Int64,
+            length::Int64, directions::Int64) =
         (
-            x, y = get_axis_vec(width, length, consts);
+            (x, y) = get_axis_vec(width, length, consts);
             f_prop = zeros(width, length, directions);
             density = zeros(width, length); # Init with ones
             velocity = zeros(width, length, 2);
             f_eq = zeros(width, length, directions);
             f_temp = zeros(width, length, directions);
-
             new(x, y, width, length, directions, f_prop,  
                 f_eq, density, velocity, f_temp);
         )
@@ -51,6 +51,8 @@ function getNeighbours(grid::Grid, i::Int, j::Int)
     return neighbours
 end
 
+export Grid_2D
+
 function get_next_index(grid::Grid, i::Int64, dir::Int64, c_s_i::Int64)
     i_n = 1 + mod(i - 1 + c_s_i + size(grid.f_prop)[dir], size(grid.f_prop)[dir])
 
@@ -64,3 +66,5 @@ function get_axis_vec(width, length, consts::LBM_Constants)
   return x, y
 
 end
+
+

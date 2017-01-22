@@ -1,37 +1,15 @@
 #! /usr/bin/env julia
 
+#__precompile__()
+
 module LatticeBoltzmann
 
-using  ProgressMeter, WriteVTK
+using  ProgressMeter, WriteVTK, ParallelAccelerator
 
 
 # Process all other files
 include("setup.jl")
 
-# ===========
-"""
-    init_lattice_state(lbm, w)
-
-Compute the initial values of the grid. Gets called before the first normal
-iteration.
-"""
-function init_lattice_state(lbm::LBM{_2D, Flow,
-                                     Streaming, Collision},
-                            w::Array{Float64, 1})
-
-  # The Initial values for the grid 
-  for k in 1:lbm.grid.directions, i in 1:lbm.grid.width, j in 1:lbm.grid.length 
-    lbm.grid.f_eq[i, j, k] = copy(w[k])
-  end
-
-  lbm.grid.f_temp = copy(lbm.grid.f_eq)
-  lbm.grid.f_prop = copy(lbm.grid.f_eq)
-  compute_macro_var(lbm)
-
-
-end
-
-# ===========
 """
    compute(lbm, name, time_step [,write_inc=0])
 
@@ -40,9 +18,8 @@ model specified by `lbm'. If `write_inc' is 0, only the first and last
 time_step are stored. Else every `write_inc' step is written into a 'vtr' file.
 
 """
-function compute(lbm::LBM{Velocity_Set, Flow,
-                          Streaming, Collision},
-                 name::String,
+function compute(grid::Grid, collision::Collision, stream::Streaming,
+                 bound::Array{Boundary, 1}, name::String,
                  time_step::Array{Float64}, write_inc::Int64=0)
 
   # Setting the directory
@@ -61,19 +38,19 @@ function compute(lbm::LBM{Velocity_Set, Flow,
 
     if write_inc == 0
         for i_step in time_step
-            step(lbm)
+            step(grid, collision, stream, bound)
 
             next!(progress)
         end
 
-        write_vtk(lbm, name, 2)
+        write_vtk(grid, name, 2)
     else
         cd(vtk_dir)
         for i_stel in time_step
             step(lbm)
 
             if i % write_inc == 0
-                write_vtk(lbm, name, i)
+                write_vtk(grid, name, i)
             end
 
             i += 1
@@ -98,14 +75,14 @@ scheme.
   5. bounce backs on the values specified in all `BounceCondition' objects in
   `bound'
 """
-function step(lbm::LBM{Velocity_Set, Flow,
-                       Streaming, Collision})
+function step(grid::Grid, collision::Collision,
+              stream::Streaming, bound::Array{Boundary, 1})
 
-    compute_collision(lbm)
-    compute_streaming(lbm)
-    compute_boundary(lbm)
-    compute_macro_var(lbm)
-    compute_f_eq(lbm)
+    compute_collision(grid, collision)
+    compute_streaming(grid, stream)
+    compute_boundary(grid, bound)
+    compute_macro_var(grid)
+    compute_f_eq(grid)
 
 end
 

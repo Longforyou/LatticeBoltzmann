@@ -19,8 +19,7 @@ end
 # ==== Corners
 # ============================================================
 # TODO Change the indices
-function boundary(lbm::LBM{D2Q9, Flow, Streaming, Collision},
-                  bound::Corner{D2Q9})
+function boundary(grid::Grid_2D, bound::Corner{D2Q9})
 
   for row in bound.row, col in bound.col
     # Convenience pointer

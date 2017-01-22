@@ -18,3 +18,7 @@ function get_velo_pois(L::Float64,
               #-4. .* (consts.U / H^2) * .* y .* (H-y)
 
 end
+
+export
+    get_pressure_pois,
+    get_velo_pois

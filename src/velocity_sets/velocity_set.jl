@@ -14,7 +14,7 @@ make the weights w and the direction arrays c_x & c_y
 """
 
 module _D2Q9
-  using ..Abstract_LBM
+  using ..Abstract_LBM, ParallelAccelerator
 
   abstract D2Q9 <: _2D
 
@@ -25,7 +25,7 @@ module _D2Q9
                               1/36, 1/36, 1/36, 1/36])
 
   # ===== Macro Vars =================================
-  function velo(V::D2Q9, f_prop::Array{Float64, 1})
+  @acc function velo(f_prop::Array{Float64, 1})
 
       return Array([sum(f_prop[[2 6 9]]) - sum(f_prop[[4 7 8]]),
                   sum(f_prop[[3 6 7]]) - sum(f_prop[[5 8 9]])])
@@ -33,7 +33,7 @@ module _D2Q9
 
 
   # Make the variables visible in the global namespace
-  export c_x, c_y, w, D2Q9, velo
+  export D2Q9
 
 end # module _D2Q9
 
@@ -41,6 +41,8 @@ end # module _D2Q9
 # include("velocity_2d.jl"); export _D2Q9
 
 # TODO 3d velocity sets
+
+using ._D2Q9
 
 include("equilibrium_func.jl")
 include("macro_var.jl")
