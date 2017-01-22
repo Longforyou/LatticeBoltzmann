@@ -2,9 +2,6 @@
 
 using Plots, LatticeBoltzmann,
     LatticeBoltzmann._D2Q9
-    D2Q9, North, South, West, East, Boundary, PeriodicPressure, Incompressible,
-    LBM_Incompressible, LBM_Constants, Grid, Bounce, BGK, FullPeriodicStreaming,
-    compute, get_pressure_pois, Collision
 
 # Grid example
 scale = 20
@@ -48,9 +45,7 @@ function pois_compr(consts::LBM_Constants, grid::Grid_2D{D2Q9, Compressible})
 
     bounds = Array{Boundary, 1}([top_bound, bottom_bound])
 
-    stream = Array{Streaming, 1}([peri_pres])
-                             FullPeriodicStreaming,
-                             BGK}(consts, grid, bounds)
+    stream = Array{Streaming, 1}([peri_pres, full_stream])
 
     compute(grid, bgk, stream, bounds, "pois_", Array(1.:t), write_inc)
 

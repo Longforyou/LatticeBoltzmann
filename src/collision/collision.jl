@@ -1,6 +1,5 @@
 #! /usr/bin/env julia
 
-=======
 """
 This module contains the description of collision operators.
 Eg. the Bhatnagar-Gross-Kroog operator
@@ -14,7 +13,6 @@ immutable BGK <: Collision
         new(omega)
     end
 end
->>>>>>> dev_newidea
 
 # ===============
 function compute_collision(grid::Grid_2D{D2Q9, Compressible}, collision::BGK)

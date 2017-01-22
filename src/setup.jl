@@ -40,7 +40,6 @@ export
     North, South,
     West, East, Incompressible,
     Compressible,
-    LBM_Incompressible,
 
     # Functions
     get_pressure_pois,

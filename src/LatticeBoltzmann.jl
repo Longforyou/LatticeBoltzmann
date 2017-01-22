@@ -83,7 +83,6 @@ function step(grid::Grid, collision::Collision,
     compute_boundary(grid, bound)
     compute_macro_var(grid)
     compute_f_eq(grid)
->>>>>>> dev_newidea
 
 end
 

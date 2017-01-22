@@ -18,7 +18,7 @@ function compute_macro_var(grid::Grid_2D{_2D, Flow})
 
 end
 
-@acc function compute_macro_var(grid::Grid_2D{D2Q9, Compressible})
+  @acc function compute_macro_var(grid::Grid_2D{D2Q9, Compressible})
 
     for i in 1:grid.width, j in 1:grid.length
          grid.density[i,j] = density( grid.f_prop[i,j, :])

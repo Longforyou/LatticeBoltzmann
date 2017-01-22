@@ -12,7 +12,6 @@ immutable FullPeriodicStreaming_2D <: Streaming
 end
 
 abstract InnerStreaming <: Streaming
->>>>>>> dev_newidea
 
 # =========== Streaming
 function compute_streaming(grid::Grid_2D, stream::Array{Streaming, 1})
@@ -102,4 +101,3 @@ end
 export
     FullPeriodicStreaming_2D,
     PressurePeriodicStream_2D
->>>>>>> dev_newidea

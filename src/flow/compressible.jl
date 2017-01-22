@@ -123,4 +123,3 @@ function step(grid::Grid_2D{D2Q9, Compressible}, collision::Collision,
 end
 
 export compute
-
