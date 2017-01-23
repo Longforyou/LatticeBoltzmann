@@ -1,12 +1,12 @@
 #! /usr/bin/env julia
 
 immutable FullPeriodicStreaming_2D <: Streaming
-    rows::Array{Int64, 1}
-    cols::Array{Int64, 1}
+    rows::UnitRange{Int64}
+    cols::UnitRange{Int64}
 
     function FullPeriodicStreaming_2D(grid::Grid_2D)
-        new(Array{Int64, 1}(1:grid.width),
-            Array{Int64, 1}(1:grid.length))
+        new(UnitRange{Int64}(1:grid.width),
+            UnitRange{Int64}(1:grid.length))
     end
 
 end
@@ -14,13 +14,13 @@ end
 abstract InnerStreaming <: Streaming
 
 # =========== Streaming
-function compute_streaming(grid::Grid_2D, stream::Array{Streaming, 1})
+function compute_streaming(grid::Grid, stream::Array{Streaming, 1}, velset::Velocity_Set)
     for stre in stream
-        stre(grid)
+        stre(grid, velset)
     end
 end
 
-function (FPS::FullPeriodicStreaming_2D)(grid::Grid_2D)
+function (FPS::FullPeriodicStreaming_2D)(grid::Grid_2D, d2q9::D2Q9)
 
     # Distribution direction
     grid.f_prop[FPS.rows, FPS.cols, 1] =
@@ -77,22 +77,24 @@ function periodic_pressure(grid::Grid_2D, k::Int64,
 
 end 
 
-function (PFPS::PressurePeriodicStream_2D{West, D2Q9})(grid::Grid_2D)
+function (PFPS::PressurePeriodicStream_2D{West, D2Q9})(grid::Grid_2D, d2q9::D2Q9)
 
     # Compute the densities for the inlet and outlet,
     # where the pressure is known
-    for k in 1:9
+    for k = 1:9
         #Inlet
         grid.f_temp[PFPS.inlet_row, PFPS.inlet_col, k] =
             periodic_pressure(grid, k, PFPS.outlet_row-1,
                               PFPS.outlet_col,
-                              PFPS.rho_inlet, _D2Q9.w[k], _D2Q9.c_x[k], _D2Q9.c_y[k])
+                              PFPS.rho_inlet, d2q9.w[k],
+                              d2q9.c_x[k], d2q9.c_y[k])
 
         #Outlet
         grid.f_temp[PFPS.outlet_row, PFPS.outlet_col, k] =
             periodic_pressure(grid, k, PFPS.inlet_row+1,
                               PFPS.inlet_col,
-                              PFPS.rho_outlet, _D2Q9.w[k], _D2Q9.c_x[k], _D2Q9.c_y[k])
+                              PFPS.rho_outlet, d2q9.w[k],
+                              d2q9.c_x[k], d2q9.c_y[k])
 
     end
 

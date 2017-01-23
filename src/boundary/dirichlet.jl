@@ -13,7 +13,8 @@ immutable Pressure{T <: Direction, S <: SolType,
 end
 
 function (P::Pressure{Direction, NonEqBounce, D2Q9})(
-    f_i::Array{Float64, 1}, rho_ind::Array{Int64, 1}, pre_ind::Array{Int64, 1},
+    f_i::Array{Float64, 1}, rho_ind::Array{Int64, 1},
+    pre_ind::Array{Int64, 1},
     post_ind::Array{Int64, 1}, sign::Bool)
 
     ru = -1. + (sum(f_i[rho_ind]) + 2. * sum(f_i[pre_ind])) / P.rho

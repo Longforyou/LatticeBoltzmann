@@ -15,7 +15,7 @@ immutable BGK <: Collision
 end
 
 # ===============
-function compute_collision(grid::Grid_2D{D2Q9, Compressible}, collision::BGK)
+function compute_collision(grid::Grid_2D, collision::BGK)
 
     # The collision of the particles is indepentend of
     # the particle type
@@ -23,32 +23,15 @@ function compute_collision(grid::Grid_2D{D2Q9, Compressible}, collision::BGK)
 
 end
 
-
 """
-The BGK-Operator relaxates the population 'f_prop' to a equilibrium function.
+The BGK-Operator relaxates the population 'f_prop'
+ to a equilibrium function.
 """
-function (bgk::BGK)(grid::Grid_2D{D2Q9, Compressible})
+function (bgk::BGK)(grid::Grid_2D)
     return grid.f_prop .* (1. - bgk.omega) .+
         grid.f_eq .* bgk.omega
 end
 
-# ===============
-function compute_collision(grid::Grid_2D{D2Q9, Incompressible}, collision::BGK)
-
-    # The collision of the particles is indepentend of
-    # the particle type
-    grid.f_temp = collision(grid)
-
-end
-
-
-"""
-The BGK-Operator relaxates the population 'f_prop' to a equilibrium function.
-"""
-function (bgk::BGK)(grid::Grid_2D{D2Q9, Incompressible})
-    return grid.f_prop .* (1. - bgk.omega) .+
-        grid.f_eq .* bgk.omega
-end
 
 # Make them available
 export BGK

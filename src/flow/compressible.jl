@@ -1,51 +1,29 @@
 #!/usr/bin/env julia
 
 # === Equilibrium Functions
-function compute_f_eq(grid::Grid_2D{D2Q9, Compressible})
+function compute_f_eq(grid::Grid_2D, d2q9::D2Q9{Compressible})
 
-    for k in 1:9
-        grid.f_eq[:,:,k] = f_eq(_D2Q9.w[k], grid.density,
+    for k = 1:9
+        grid.f_eq[:,:,k] = f_eq(d2q9.w[k], grid.density,
                                 grid.velocity[:,:,1].^2 +
                                 grid.velocity[:,:,2].^2,
                                 c_dot_uv(grid.velocity,
-                                          _D2Q9.c_x[k], _D2Q9.c_y[k]))
+                                          d2q9.c_x[k], d2q9.c_y[k]))
     end
 end
 
-@acc function f_eq(w::Float64, rho::Float64,
+function f_eq(w::Float64, rho::Float64,
               u_2::Array{Float64,1}, c_uv::Array{Float64,1})
 
     w .* (rho .+ 3.0 .* c_uv .+ 4.5 .* c_uv.^2 .- 1.5 .* u_2)
 end
 
-@acc function f_eq(w::Float64,
+function f_eq(w::Float64,
               rho::Array{Float64, 2},
               u_2::Array{Float64,2}, c_uv::Array{Float64,2})
     w .* (rho .+ 3.0 .* c_uv  + 4.5 .* c_uv.^2 - 1.5 .* u_2)
 end
 
-# ===========
-"""
-    init_lattice_state(lbm, w)
-
-Compute the initial values of the grid. Gets called before the first normal
-iteration.
-"""
-function init_lattice_state(grid::Grid_2D{D2Q9, Compressible})
-
-  # The Initial values for the grid 
-  for k in 1:9, i in 1:grid.width, j in 1:grid.length 
-    grid.f_eq[i, j, k] = copy(_D2Q9.w[k])
-  end
-
-  grid.f_temp = copy(grid.f_eq)
-  grid.f_prop = copy(grid.f_eq)
-  compute_macro_var(grid)
-
-
-end
-
-# ===========
 """
    compute(lbm, name, time_step [,write_inc=0])
 
@@ -54,10 +32,11 @@ model specified by `lbm'. If `write_inc' is 0, only the first and last
 time_step are stored. Else every `write_inc' step is written into a 'vtr' file.
 
 """
-function compute(grid::Grid_2D{D2Q9, Compressible}, collision::Collision,
+function compute(grid::Grid_2D, d2q9::D2Q9{Compressible},
+                 collision::Collision,
                  stream::Array{Streaming, 1}, 
                  bound::Array{Boundary, 1}, name::String,
-                 time_step::Array{Float64}, write_inc::Int64=0)
+                 time_step::Float64, write_inc::Int64=0)
 
   # Setting the directory
   src_dir = pwd()
@@ -67,15 +46,15 @@ function compute(grid::Grid_2D{D2Q9, Compressible}, collision::Collision,
   progress = Progress(length(time_step), 1, "Computing...", 30)
   
   println("INITIALISE LATTICE NODES...")
-  init_lattice_state(grid)
+  init_lattice_state(grid, d2q9)
 
   i = 1
   write_vtk(grid, name, i)
   next!(progress)
 
     if write_inc == 0
-        for i_step in time_step
-            step(grid, collision, stream, bound)
+        for i_step = 1.:time_step
+            step(grid, d2q9, collision, stream, bound)
 
             next!(progress)
         end
@@ -83,8 +62,8 @@ function compute(grid::Grid_2D{D2Q9, Compressible}, collision::Collision,
         write_vtk(grid, name, 2)
     else
         cd(vtk_dir)
-        for i_stel in time_step
-            step(grid, collision, stream, bound)
+        for i_stel = 1.:time_step
+            step(grid, d2q9, collision, stream, bound)
 
             if i % write_inc == 0
                 write_vtk(grid, name, i)
@@ -111,14 +90,14 @@ scheme.
   5. bounce backs on the values specified in all `BounceCondition' objects in
   `bound'
 """
-function step(grid::Grid_2D{D2Q9, Compressible}, collision::Collision,
+function step(grid::Grid_2D, d2q9::D2Q9, collision::Collision,
               stream::Array{Streaming, 1}, bound::Array{Boundary, 1})
 
     compute_collision(grid, collision)
-    compute_streaming(grid, stream)
+    compute_streaming(grid, stream, d2q9)
     compute_boundary(grid, bound)
-    compute_macro_var(grid)
-    compute_f_eq(grid)
+    compute_macro_var(grid, d2q9)
+    compute_f_eq(grid, d2q9)
 
 end
 
