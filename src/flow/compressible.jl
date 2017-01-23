@@ -1,29 +1,5 @@
 #!/usr/bin/env julia
 
-# === Equilibrium Functions
-function compute_f_eq(grid::Grid_2D, d2q9::D2Q9{Compressible})
-
-    for k = 1:9
-        grid.f_eq[:,:,k] = f_eq(d2q9.w[k], grid.density,
-                                grid.velocity[:,:,1].^2 +
-                                grid.velocity[:,:,2].^2,
-                                c_dot_uv(grid.velocity,
-                                          d2q9.c_x[k], d2q9.c_y[k]))
-    end
-end
-
-function f_eq(w::Float64, rho::Float64,
-              u_2::Array{Float64,1}, c_uv::Array{Float64,1})
-
-    w .* (rho .+ 3.0 .* c_uv .+ 4.5 .* c_uv.^2 .- 1.5 .* u_2)
-end
-
-function f_eq(w::Float64,
-              rho::Array{Float64, 2},
-              u_2::Array{Float64,2}, c_uv::Array{Float64,2})
-    w .* (rho .+ 3.0 .* c_uv  + 4.5 .* c_uv.^2 - 1.5 .* u_2)
-end
-
 """
    compute(lbm, name, time_step [,write_inc=0])
 
@@ -42,27 +18,26 @@ function compute(grid::Grid_2D, d2q9::D2Q9{Compressible},
   src_dir = pwd()
   vtk_dir = string(src_dir, "/vtk")
 
-  mkpath(vtk_dir)
-  progress = Progress(length(time_step), 1, "Computing...", 30)
+    mkpath(vtk_dir)
+    println("Run a LatticeBoltzmann-Simulation with ",
+            time_step, " step.")
   
   println("INITIALISE LATTICE NODES...")
   init_lattice_state(grid, d2q9)
 
   i = 1
   write_vtk(grid, name, i)
-  next!(progress)
 
     if write_inc == 0
-        for i_step = 1.:time_step
+        @showprogress 3 "Computing..." for i_step = 1.:time_step
             step(grid, d2q9, collision, stream, bound)
 
-            next!(progress)
         end
 
         write_vtk(grid, name, 2)
     else
         cd(vtk_dir)
-        for i_stel = 1.:time_step
+        @showprogress 3 "Computing..." for i_stel = 1.:time_step
             step(grid, d2q9, collision, stream, bound)
 
             if i % write_inc == 0
@@ -70,7 +45,6 @@ function compute(grid::Grid_2D, d2q9::D2Q9{Compressible},
             end
 
             i += 1
-            next!(progress)
         end
         cd("..")
     end
@@ -101,5 +75,6 @@ function step(grid::Grid_2D, d2q9::D2Q9, collision::Collision,
 
 end
 
-export compute
+
+
 

@@ -83,14 +83,14 @@ function (PFPS::PressurePeriodicStream_2D{West, D2Q9})(grid::Grid_2D, d2q9::D2Q9
     # where the pressure is known
     for k = 1:9
         #Inlet
-        grid.f_temp[PFPS.inlet_row, PFPS.inlet_col, k] =
+        @fastmath @inbounds grid.f_temp[PFPS.inlet_row, PFPS.inlet_col, k] =
             periodic_pressure(grid, k, PFPS.outlet_row-1,
                               PFPS.outlet_col,
                               PFPS.rho_inlet, d2q9.w[k],
                               d2q9.c_x[k], d2q9.c_y[k])
 
         #Outlet
-        grid.f_temp[PFPS.outlet_row, PFPS.outlet_col, k] =
+        @fastmath @inbounds grid.f_temp[PFPS.outlet_row, PFPS.outlet_col, k] =
             periodic_pressure(grid, k, PFPS.inlet_row+1,
                               PFPS.inlet_col,
                               PFPS.rho_outlet, d2q9.w[k],

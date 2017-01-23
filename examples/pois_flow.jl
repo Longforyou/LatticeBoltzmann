@@ -5,10 +5,10 @@ using Plots, LatticeBoltzmann,
 pyplot()
 
 # Grid example
-scale = 20
-x = 5 * scale
+scale = 10
+x = 20 * scale
 y = 5 * scale
-t =  4e1 * x
+t =  4e0 * x
 write_inc = 5 #:w20 # After 50 Iter a file is created
 U = 0.1 
 H = 1.
