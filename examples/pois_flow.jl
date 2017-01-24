@@ -4,11 +4,11 @@ using Plots, LatticeBoltzmann,
     LatticeBoltzmann._D2Q9
 
 # Grid example
-scale = 20
-x = 5 * scale
+scale = 10
+x = 20 * scale
 y = 5 * scale
-t =  4e4* x
-write_inc = 5 #20 # After 50 Iter a file is created
+t =  4e0 * x
+write_inc = 5 #:w20 # After 50 Iter a file is created
 U = 0.1 
 H = 1.
 L = 1. * H
@@ -17,16 +17,19 @@ mu_luft = 12.205e-6
 rho_luft = 1.189
 tau1 = sqrt(3/16) + 0.5
 
+# Create the velocity sets
+d2q9 = D2Q9{Compressible}()
+
 # Define all constants
 consts =  LBM_Constants(U, H, nu_luft, rho_luft,
                        L, H, tau1)
 
 # Create all objects for the LBM
-grid = Grid_2D{D2Q9, Compressible}(consts, x, y, 9)
+grid = Grid_2D(consts, x, y, 9)
 
 
 # Function to generate all objects for one simulation
-function pois_compr(consts::LBM_Constants, grid::Grid_2D{D2Q9, Compressible})
+function pois_compr(consts::LBM_Constants, grid::Grid_2D, d2q9::D2Q9{Compressible}, t::Float64)
 
     println("Constants: ", consts)
     bgk = BGK(consts)
@@ -47,11 +50,11 @@ function pois_compr(consts::LBM_Constants, grid::Grid_2D{D2Q9, Compressible})
 
     stream = Array{Streaming, 1}([peri_pres, full_stream])
 
-    compute(grid, bgk, stream, bounds, "pois_", Array(1.:t), write_inc)
+    compute(grid, d2q9, bgk, stream, bounds, "pois_", t, write_inc)
 
 end
 
-@time pois_compr(consts, grid)
+@time pois_compr(consts, grid, d2q9, t)
 
 # Analytical solution
 y_vec = Array{Float64}((0:y-1))

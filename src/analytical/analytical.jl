@@ -5,7 +5,7 @@ This file contains some analytical solution for a flow.
 """
 
 function get_pressure_pois(consts::LBM_Constants)
-  32. * consts.nu_F * consts.rho_F * consts.phys_x * consts.U / (consts.phys_y ^ 2) 
+  32. * consts.nu * 1. * consts.phys_x * consts.U / (consts.phys_y ^ 2) 
 end
 
 function get_velo_pois(L::Float64,
