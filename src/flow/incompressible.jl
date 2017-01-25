@@ -4,9 +4,7 @@
 Compute the initial values of the grid. Gets called before the first normal
 iteration.
 """
-function init_lattice_state(grid::Grid_2D{D2Q9, Incompressible})
-
-  using _D2Q9: w
+function init_lattice_state(grid::Grid_2D)
 
   # The Initial values for the grid 
   for k in 1:length(w), i in 1:grid.width, j in 1:grid.length 

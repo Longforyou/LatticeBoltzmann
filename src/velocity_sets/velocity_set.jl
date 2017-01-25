@@ -20,13 +20,16 @@ immutable D2Q9{F<:Flow} <: _2D
     c_x::Array{Float64, 1}
     c_y::Array{Float64, 1}
     w::Array{Float64, 1}
+    dict::Dict{DataType, Array{Int64, 1}}
 
     D2Q9() = (
       # Some constant fields
       new(Array{Float64, 1}([0., 1., 0., -1., 0., 1., -1., -1., 1.]), 
       Array{Float64, 1}([0., 0., 1., 0., -1., 1., 1., -1., -1.]),
       Array{Float64, 1}([4/9, 1/9, 1/9, 1/9, 1/9,
-                         1/36, 1/36, 1/36, 1/36]))
+                         1/36, 1/36, 1/36, 1/36]),
+          Dict([(North, [3, 6, 7]), (South, [5, 8, 9]),
+                (West, [4, 7, 8]), (East, [2, 6, 9])]))
     )
 
   end
@@ -41,7 +44,7 @@ end
 
 function velo_2(f_prop::Array{Float64, 1})
     return f_prop[3] + f_prop[6] + f_prop[7] -
-        f_prop[5] - f_prop[8] - fprop[9]
+        f_prop[5] - f_prop[8] - f_prop[9]
 end
 
   # Make the variables visible in the global namespace

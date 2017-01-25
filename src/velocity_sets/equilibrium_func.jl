@@ -5,55 +5,76 @@
 #  for the computation of the equilibrium function
 # """
 # =========== Equilibrium Distribution function
-
- @acc function c_dot_uv(velo::Array{Float64,2}, 
-                  c_x::Float64, c_y::Float64)
-  c_x .* velo[:,1] .+ c_y .* velo[:,2]
-  end
-  
-  @acc function c_dot_uv(velo::Array{Float64,3}, 
-                    c_x::Float64, c_y::Float64)
-    c_x .* velo[:,:,1] .+ c_y .* velo[:,:,2]
-  end
-
-function compute_f_eq(grid::Grid_2D, d2q9::D2Q9{Incompressible})
-
-    @parallel for k = 1:length(w)
-        @inbounds @fastmath grid.f_eq[:,:,k] =
-            f_eq(d2q9.w[k], grid.density,
-                 c_dot_uv(grid.velocity,
-                          d2q9.c_x[k], d2q9.c_y[k]))
-    end
+function compute_f_eq(grid::Grid_2D, velset::_2D)
+    @inbounds @fastmath f_eq!(grid.f_eq, velset, grid.density, grid.velocity)
 end
 
-function f_eq(w::Float64, rho::Float64, c_uv::Array{Float64,1})
-    w .* (rho .+ 3.0 .* c_uv)
+function f_eq!(grid_f_eq::Array{Float64, 3}, d2q9::D2Q9,
+              rho::Array{Float64, 2}, velo::Array{Float64, 3})
+
+    sz_grid = size(grid_f_eq)
+
+    for i = 1:sz_grid[1]
+        for j = 1:sz_grid[2]
+            f_eq_kernel!(grid_f_eq[i, j, :], rho[i, j], velo[i, j, 1],
+                         velo[i, j, 2], d2q9)
+        end # j
+    end # i
+end # f_eq
+
+# For the boundary compuations
+function f_eq(d2q9::D2Q9, rho::Float64, velo::Array{Float64, 2})
+
+    sz_grid = size(velo)
+    out_f_eq = zeros(sz_grid[1], 9)
+
+    for i = 1:sz_grid[1]
+            f_eq_kernel!(out_f_eq[i, :], rho, velo[i, 1], velo[i, 2], d2q9)
+    end # i
+
+    return out_f_eq
+end # f_eq
+
+function f_eq_kernel!(out_f_eq::Array{Float64, 1}, rho::Float64,
+                      ux::Float64, uy::Float64, d2q9::D2Q9{Compressible})
+
+    ueqxij = ux; ueqyij = uy;
+    uxsq = ueqxij ^ 2; uysq = ueqyij ^ 2;
+
+    uxuy6 = ueqxij + ueqyij; uxuy7 = -ueqxij + ueqyij;
+    uxuy8 = -ueqxij - ueqyij; uxuy9 = ueqxij - ueqyij;
+
+    usq = 1.5 * (uxsq + uysq)
+
+    out_f_eq[1] = d2q9.w[1] * (rho - usq)
+    out_f_eq[2] = d2q9.w[2] * (rho + 3. * ueqxij + 4.5 * uxsq - usq)
+    out_f_eq[3] = d2q9.w[3] * (rho + 3. * ueqyij + 4.5 * uysq - usq)
+    out_f_eq[4] = d2q9.w[4] * (rho - 3. * ueqxij + 4.5 * uxsq - usq)
+    out_f_eq[5] = d2q9.w[5] * (rho - 3. * ueqyij + 4.5 * uysq - usq)
+    out_f_eq[6] = d2q9.w[6] * (rho + 3. * uxuy6 + 4.5 * uxuy6^2 - usq)
+    out_f_eq[7] = d2q9.w[7] * (rho + 3. * uxuy7 + 4.5 * uxuy7^2 - usq)
+    out_f_eq[8] = d2q9.w[8] * (rho + 3. * uxuy8 + 4.5 * uxuy8^2 - usq)
+    out_f_eq[9] = d2q9.w[9] * (rho + 3. * uxuy9 + 4.5 * uxuy9^2 - usq)
+
 end
 
-function f_eq(w::Float64, rho::Array{Float64, 2}, c_uv::Array{Float64,2})
-    w .* (rho .+ 3.0 .* c_uv)
-end
+function f_eq_kernel!(out_f_eq::Array{Float64, 1}, rho::Float64,
+                      ux::Float64, uy::Float64, d2q9::D2Q9{Incompressible})
 
-# === Equilibrium Functions
-function compute_f_eq(grid::Grid_2D, d2q9::D2Q9{Compressible})
+    ueqxij = ux; ueqyij = uy;
+    uxsq = ueqxij ^ 2; uysq = ueqyij ^ 2;
 
-    @parallel for k = 1:9
-        @inbounds @fastmath grid.f_eq[:,:,k] = f_eq(d2q9.w[k], grid.density,
-                                grid.velocity[:,:,1].^2 +
-                                grid.velocity[:,:,2].^2,
-                                c_dot_uv(grid.velocity,
-                                          d2q9.c_x[k], d2q9.c_y[k]))
-    end
-end
+    uxuy6 = ueqxij + ueqyij; uxuy7 = -ueqxij + ueqyij;
+    uxuy8 = -ueqxij - ueqyij; uxuy9 = ueqxij - ueqyij;
 
-function f_eq(w::Float64, rho::Float64,
-              u_2::Array{Float64,1}, c_uv::Array{Float64,1})
+    out_f_eq[1] = d2q9.w[1] * rho
+    out_f_eq[2] = d2q9.w[2] * (rho + 3. * ueqxij)
+    out_f_eq[3] = d2q9.w[3] * (rho + 3. * ueqyij)
+    out_f_eq[4] = d2q9.w[4] * (rho - 3. * ueqxij)
+    out_f_eq[5] = d2q9.w[5] * (rho - 3. * ueqyij)
+    out_f_eq[6] = d2q9.w[6] * (rho + 3. * uxuy6)
+    out_f_eq[7] = d2q9.w[7] * (rho + 3. * uxuy7)
+    out_f_eq[8] = d2q9.w[8] * (rho + 3. * uxuy8)
+    out_f_eq[9] = d2q9.w[9] * (rho + 3. * uxuy9)
 
-    w .* (rho .+ 3.0 .* c_uv .+ 4.5 .* c_uv.^2 .- 1.5 .* u_2)
-end
-
-function f_eq(w::Float64,
-              rho::Array{Float64, 2},
-              u_2::Array{Float64,2}, c_uv::Array{Float64,2})
-    w .* (rho .+ 3.0 .* c_uv  + 4.5 .* c_uv.^2 - 1.5 .* u_2)
 end
