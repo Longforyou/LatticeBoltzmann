@@ -1,10 +1,10 @@
 #! /usr/bin/env julia
 
-#__precompile__()
+__precompile__()
 
 module LatticeBoltzmann
 
-using  ProgressMeter, WriteVTK, ParallelAccelerator
+using  ProgressMeter, WriteVTK #, ParallelAccelerator
 
 
 # Process all other files

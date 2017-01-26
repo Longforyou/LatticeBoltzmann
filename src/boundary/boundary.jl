@@ -18,10 +18,10 @@ abstract BounceCondition <: Boundary
 # ==== Boundary Function
 # ===========
 
-function compute_boundary(grid::Grid, bound::Array{Boundary, 1})
+function compute_boundary(grid::Grid, bound::Array{Boundary, 1}, velset::Velocity_Set)
 
     for b in bound
-        boundary(grid, b)
+        boundary(grid, b, velset)
     end
 end
 

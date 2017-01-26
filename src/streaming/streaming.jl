@@ -16,31 +16,22 @@ abstract InnerStreaming <: Streaming
 # =========== Streaming
 function compute_streaming(grid::Grid, stream::Array{Streaming, 1}, velset::Velocity_Set)
     for stre in stream
-        stre(grid, velset)
+        streaming!(stre, grid, velset)
     end
 end
 
-function (FPS::FullPeriodicStreaming_2D)(grid::Grid_2D, d2q9::D2Q9)
+function streaming!(FPS::FullPeriodicStreaming_2D, grid::Grid_2D, d2q9::D2Q9)
 
     # Distribution direction
-    grid.f_prop[FPS.rows, FPS.cols, 1] =
-        circshift( grid.f_temp[:, : ,1],[ 0  1])
-    grid.f_prop[FPS.rows, FPS.cols, 2] =
-        circshift( grid.f_temp[FPS.rows, FPS.cols, 2],[ 1  0])
-    grid.f_prop[FPS.rows, FPS.cols, 3] =
-        circshift( grid.f_temp[FPS.rows, FPS.cols, 3],[ 0 -1])
-    grid.f_prop[FPS.rows, FPS.cols, 4] =
-        circshift( grid.f_temp[FPS.rows, FPS.cols, 4],[-1  0])
-    grid.f_prop[FPS.rows, FPS.cols, 5] =
-        circshift( grid.f_temp[FPS.rows, FPS.cols, 5],[ 1  1])
-    grid.f_prop[FPS.rows, FPS.cols, 6] =
-        circshift( grid.f_temp[FPS.rows, FPS.cols, 6],[ 1 -1])
-    grid.f_prop[FPS.rows, FPS.cols, 7] =
-        circshift( grid.f_temp[FPS.rows, FPS.cols, 7],[-1 -1])
-    grid.f_prop[FPS.rows, FPS.cols, 8] =
-        circshift( grid.f_temp[FPS.rows, FPS.cols, 8],[-1  1])
-    grid.f_prop[FPS.rows, FPS.cols, 9] =
-        grid.f_temp[FPS.rows, FPS.cols, 9]
+    grid.f_prop[FPS.rows, FPS.cols, 1] = grid.f_temp[FPS.rows, FPS.cols, 1]
+    grid.f_prop[FPS.rows, FPS.cols, 2] = circshift( grid.f_temp[:, : , 2],[ 0  1])
+    grid.f_prop[FPS.rows, FPS.cols, 3] = circshift( grid.f_temp[FPS.rows, FPS.cols, 3],[ 1  0])
+    grid.f_prop[FPS.rows, FPS.cols, 4] = circshift( grid.f_temp[FPS.rows, FPS.cols, 4],[ 0 -1])
+    grid.f_prop[FPS.rows, FPS.cols, 5] = circshift( grid.f_temp[FPS.rows, FPS.cols, 5],[-1  0])
+    grid.f_prop[FPS.rows, FPS.cols, 6] = circshift( grid.f_temp[FPS.rows, FPS.cols, 6],[ 1  1])
+    grid.f_prop[FPS.rows, FPS.cols, 7] = circshift( grid.f_temp[FPS.rows, FPS.cols, 7],[ 1 -1])
+    grid.f_prop[FPS.rows, FPS.cols, 8] = circshift(grid.f_temp[FPS.rows, FPS.cols, 8],[-1 -1])
+    grid.f_prop[FPS.rows, FPS.cols, 9] = circshift(grid.f_temp[FPS.rows, FPS.cols, 9],[-1  1])
     
 end
 
@@ -62,41 +53,32 @@ end
 # ============================================================
 # ==== Periodic STreaming with Pressure condition
 # ============================================================
-function periodic_pressure(grid::Grid_2D, k::Int64,
+function periodic_pressure(grid::Grid_2D, d2q9::D2Q9,
                            bound_row::Int64,
                            bound_col::Array{Int64,1},
-                           bound_rho::Float64, w::Float64,
-                           c_x::Float64, c_y::Float64)
+                           bound_rho::Float64)
 
-    f_eq(w, bound_rho,
-         grid.velocity[bound_row, bound_col, 1].^2 .+
-         grid.velocity[bound_row, bound_col, 2].^2, 
-         c_dot_uv( grid.velocity[bound_row, bound_col, :], c_x, c_y)) .+ 
-             ( grid.f_temp[bound_row, bound_col, k]
-               .-  grid.f_eq[bound_row, bound_col, k])
+    return f_eq(d2q9, bound_rho, grid.velocity[bound_row, bound_col, :]) .+
+             ( grid.f_temp[bound_row, bound_col, :]
+               .-  grid.f_eq[bound_row, bound_col, :])
 
 end 
 
-function (PFPS::PressurePeriodicStream_2D{West, D2Q9})(grid::Grid_2D, d2q9::D2Q9)
+function streaming!(PFPS::PressurePeriodicStream_2D{West, D2Q9}, grid::Grid_2D, d2q9::D2Q9)
 
     # Compute the densities for the inlet and outlet,
     # where the pressure is known
-    for k = 1:9
-        #Inlet
-        @fastmath @inbounds grid.f_temp[PFPS.inlet_row, PFPS.inlet_col, k] =
-            periodic_pressure(grid, k, PFPS.outlet_row-1,
-                              PFPS.outlet_col,
-                              PFPS.rho_inlet, d2q9.w[k],
-                              d2q9.c_x[k], d2q9.c_y[k])
+    #Inlet
+    @fastmath @inbounds grid.f_temp[PFPS.inlet_row, PFPS.inlet_col, :] =
+        periodic_pressure(grid, d2q9, PFPS.outlet_row-1,
+                          PFPS.outlet_col,
+                          PFPS.rho_inlet)
 
-        #Outlet
-        @fastmath @inbounds grid.f_temp[PFPS.outlet_row, PFPS.outlet_col, k] =
-            periodic_pressure(grid, k, PFPS.inlet_row+1,
-                              PFPS.inlet_col,
-                              PFPS.rho_outlet, d2q9.w[k],
-                              d2q9.c_x[k], d2q9.c_y[k])
-
-    end
+    #Outlet
+    @fastmath @inbounds grid.f_temp[PFPS.outlet_row, PFPS.outlet_col, :] =
+        periodic_pressure(grid, d2q9, PFPS.inlet_row+1,
+                          PFPS.inlet_col,
+                          PFPS.rho_outlet)
 
 end
 

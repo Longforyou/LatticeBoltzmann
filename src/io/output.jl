@@ -21,7 +21,6 @@ function write_vtk(grid::Grid_2D, name::String, step::Int64)
     vtk_point_data(vtk_f, vtk_velocity[:, :, 1], "y-Velocity")
     vtk_point_data(vtk_f, vtk_velocity[:, :, 2], "x-Velocity")
 
-
     vtk_save(vtk_f)
 
 end

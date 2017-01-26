@@ -69,7 +69,7 @@ function step(grid::Grid_2D, d2q9::D2Q9, collision::Collision,
 
     compute_collision(grid, collision)
     compute_streaming(grid, stream, d2q9)
-    compute_boundary(grid, bound)
+    compute_boundary(grid, bound, d2q9)
     compute_macro_var(grid, d2q9)
     compute_f_eq(grid, d2q9)
 
