@@ -10,6 +10,6 @@ using  ProgressMeter, WriteVTK #, ParallelAccelerator
 # Process all other files
 include("setup.jl")
 
-export compute
+export compute!
 
 end # module

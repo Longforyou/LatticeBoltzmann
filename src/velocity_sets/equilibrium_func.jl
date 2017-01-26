@@ -5,7 +5,7 @@
 #  for the computation of the equilibrium function
 # """
 # =========== Equilibrium Distribution function
-function compute_f_eq(grid::Grid_2D, velset::_2D)
+function compute_f_eq!(grid::Grid_2D, velset::_2D)
     @inbounds @fastmath f_eq!(grid.f_eq, velset, grid.density, grid.velocity)
 end
 

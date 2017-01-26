@@ -8,7 +8,7 @@ model specified by `lbm'. If `write_inc' is 0, only the first and last
 time_step are stored. Else every `write_inc' step is written into a 'vtr' file.
 
 """
-function compute(grid::Grid_2D, d2q9::D2Q9{Compressible},
+function compute!(grid::Grid_2D, d2q9::D2Q9{Compressible},
                  collision::Collision,
                  stream::Array{Streaming, 1}, 
                  bound::Array{Boundary, 1}, name::String,
@@ -23,14 +23,14 @@ function compute(grid::Grid_2D, d2q9::D2Q9{Compressible},
             time_step, " step.")
   
   println("INITIALISE LATTICE NODES...")
-  init_lattice_state(grid, d2q9)
+  init_lattice_state!(grid, d2q9)
 
   i = 1
   write_vtk(grid, name, i)
 
     if write_inc == 0
         @showprogress 3 "Computing..." for i_step = 1.:time_step
-            step(grid, d2q9, collision, stream, bound)
+            step!(grid, d2q9, collision, stream, bound)
 
         end
 
@@ -38,7 +38,8 @@ function compute(grid::Grid_2D, d2q9::D2Q9{Compressible},
     else
         cd(vtk_dir)
         @showprogress 3 "Computing..." for i_stel = 1.:time_step
-            step(grid, d2q9, collision, stream, bound)
+            println(i_stel)
+            step!(grid, d2q9, collision, stream, bound)
 
             if i % write_inc == 0
                 write_vtk(grid, name, i)
@@ -64,14 +65,15 @@ scheme.
   5. bounce backs on the values specified in all `BounceCondition' objects in
   `bound'
 """
-function step(grid::Grid_2D, d2q9::D2Q9, collision::Collision,
+function step!(grid::Grid_2D, d2q9::D2Q9, collision::Collision,
               stream::Array{Streaming, 1}, bound::Array{Boundary, 1})
 
-    compute_collision(grid, collision)
-    compute_streaming(grid, stream, d2q9)
-    compute_boundary(grid, bound, d2q9)
-    compute_macro_var(grid, d2q9)
-    compute_f_eq(grid, d2q9)
+    println(grid.f_eq)
+    compute_collision!(grid, collision)
+    compute_streaming!(grid, stream, d2q9)
+    compute_boundary!(grid, bound, d2q9)
+    compute_macro_var!(grid, d2q9)
+    compute_f_eq!(grid, d2q9)
 
 end
 

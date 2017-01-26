@@ -15,7 +15,7 @@ immutable BGK <: Collision
 end
 
 # ===============
-function compute_collision(grid::Grid_2D, collision::Collision)
+function compute_collision!(grid::Grid_2D, collision::Collision)
 
     # The collision of the particles is indepentend of
     # the particle type

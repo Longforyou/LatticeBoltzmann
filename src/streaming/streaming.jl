@@ -14,13 +14,14 @@ end
 abstract InnerStreaming <: Streaming
 
 # =========== Streaming
-function compute_streaming(grid::Grid, stream::Array{Streaming, 1}, velset::Velocity_Set)
+function compute_streaming!(grid::Grid, stream::Array{Streaming, 1}, velset::Velocity_Set)
     for stre in stream
         streaming!(stre, grid, velset)
     end
 end
 
-function streaming!(FPS::FullPeriodicStreaming_2D, grid::Grid_2D, d2q9::D2Q9)
+function streaming!(FPS::FullPeriodicStreaming_2D, grid::Grid_2D,
+                    d2q9::D2Q9)
 
     # Distribution direction
     grid.f_prop[FPS.rows, FPS.cols, 1] = grid.f_temp[FPS.rows, FPS.cols, 1]
@@ -39,7 +40,7 @@ end
 #! /usr/bin/env julia
 
 immutable PressurePeriodicStream_2D{T <: Direction,
-                           V <: _2D} <: Streaming
+                           V <: _2D} <: Boundary
 
     rho_inlet::Float64
     rho_outlet::Float64
@@ -64,7 +65,8 @@ function periodic_pressure(grid::Grid_2D, d2q9::D2Q9,
 
 end 
 
-function streaming!(PFPS::PressurePeriodicStream_2D{West, D2Q9}, grid::Grid_2D, d2q9::D2Q9)
+function boundary!(grid::Grid_2D,
+                   PFPS::PressurePeriodicStream_2D{West, D2Q9}, d2q9::D2Q9)
 
     # Compute the densities for the inlet and outlet,
     # where the pressure is known

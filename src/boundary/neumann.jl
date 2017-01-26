@@ -13,10 +13,11 @@ immutable Neumann{T<:Direction, S<:SolType,
 end
 
 # Define a functor for the bondary
-function (V::Neumann{Direction, NonEqBounce, D2Q9})(f_i::Array{Float64, 1},
-                        vel_ind::Array{Int64, 1},
+function compute_neumann{T<:Direction}(V::Neumann{T, NonEqBounce, D2Q9},
+                         f_i::Array{Float64, 1},
                         pre_ind::Array{Int64, 1},
                         post_ind::Array{Int64, 1},
+                        vel_ind::Array{Int64, 1},
                          sign::Bool)
 
   # Compute the new values
@@ -49,19 +50,17 @@ function (V::Neumann{Direction, NonEqBounce, D2Q9})(f_i::Array{Float64, 1},
 end
 
 # Neumann solution schemes for D2Q9
-function boundary(grid::Grid_2D, bound::Neumann{North, NonEqBounce,
-                                 D2Q9})
+function boundary(grid::Grid_2D,
+                  bound::Neumann{North, NonEqBounce,
+                                 D2Q9}, velset::_2D)
   
     for row in bound.rows, col in bound.cols
       # Call the generic function
-      lbm.grid.f_temp[row, col, :] =
-          bound(lbm.grid.f_temp[row, col, :],
-                          bound.vel, [5, 8, 9], [3, 6, 7],
+      grid.f_temp[row, col, :] =
+          bound(grid.f_temp[row, col, :],
+                          bound.vel, velset.dict[South], velset.dict[North],
                           [1, 2, 4], true )
     end 
-
-    # Correct the velocity on the boundary
-    # lbm.grid.velocity[bound.rows, bound.cols, :] = bound.vel
   
 end
 
@@ -70,32 +69,26 @@ function boundary(grid::Grid_2D, bound::Neumann{South, NonEqBounce,
   
   for row in bound.rows, col in bound.cols
     # Call the generic function
-    lbm.grid.f_temp[row, col, :] =
-        bound(lbm.grid.f_temp[row, col, :],
+    grid.f_temp[row, col, :] =
+        bound(grid.f_temp[row, col, :],
                         bound.vel, [3, 6, 7], [5, 8, 9],
                         [1, 2, 4], false)
   end
- 
-  #Correct the velocity on the boundary
-  # lbm.grid.velocity[bound.rows, bound.cols, :] = bound.vel
-  
 
 end
 
-function boundary(grid::Grid_2D, bound::Neumann{West, NonEqBounce,
-                                 D2Q9})
+function boundary!(grid::Grid_2D,
+                  bound::Neumann{West, NonEqBounce,
+                                 D2Q9}, velset::_2D)
   
     for row in bound.rows, col in bound.cols
       # Call the generic function
-        lbm.grid.f_temp[row, col, :] =
-            bound(lbm.grid.f_temp[row, col, :],
-                            bound.vel, [4, 8, 6], [2, 6, 9],
+        grid.f_prop[row, col, :] =
+            compute_neumann(bound, grid.f_prop[row, col, :],
+                            velset.dict[East], velset.dict[West],
                             [1, 3, 5], false)
     end
- 
-    # Correct the velocity on the boundary
-    lbm.grid.velocity[bound.rows, bound.cols, :] = bound.vel
-  
+                            #bound.vel, [4, 8, 6], [2, 6, 9],
 
 end
 
@@ -105,13 +98,10 @@ function boundary(grid::Grid_2D,
  
   for row in bound.rows, col in bound.cols
     # Call the generic function
-    lbm.grid.f_temp[row, col, :] =
-        bound(lbm.grid.f_temp[row, col, :], true)
+    grid.f_temp[row, col, :] =
+        bound(grid.f_temp[row, col, :], true)
    
   end 
-  
-  # Correct the velocity on the boundary
-  # lbm.grid.velocity[bound.rows, bound.cols, :] = bound.vel
 
 end
 

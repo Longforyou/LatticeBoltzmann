@@ -35,6 +35,7 @@ export
     Collision,
     Neumann,
     Bounce,
+    NonEqBounce,
     OpenBounce,
     PeridicPressure
     North, South,
@@ -44,7 +45,6 @@ export
     # Functions
     get_pressure_pois,
     get_velo_pois,
-    getNeighbours,
     get_next_index,
     get_axis_vec
 

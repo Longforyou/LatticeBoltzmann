@@ -13,8 +13,7 @@ function get_velo_pois(L::Float64,
                        consts::LBM_Constants, y::Array{Float64, 1})
 
     pres = get_pressure_pois(consts)
-    pres ./ (2. * consts.nu * consts.rho_F *
-              L) .* y .* (H - y)
+    pres ./ (2. * consts.nu * 1. *  L) .* y .* (H - y)
               #-4. .* (consts.U / H^2) * .* y .* (H-y)
 
 end

@@ -4,8 +4,8 @@ using Plots, LatticeBoltzmann,
     LatticeBoltzmann._D2Q9
 
 # Grid example
-scale = 10
-x = 20 * scale
+scale = 1
+x = 5 * scale
 y = 5 * scale
 t =  4e0 * x
 write_inc = 5 #:w20 # After 50 Iter a file is created
@@ -44,13 +44,17 @@ function pois_compr(consts::LBM_Constants, grid::Grid_2D, d2q9::D2Q9{Compressibl
     peri_pres = PressurePeriodicStream_2D{West, D2Q9}(rho_in, rho_out,
                                              1, Array{Int64}(1:y),
                                                       x, Array{Int64}(1:y))
+
+    velneu = Neumann{West, NonEqBounce, D2Q9}(consts.U, [1],
+                                              Array{Int64}( 1:y ))
     full_stream = FullPeriodicStreaming_2D(grid)
 
-    bounds = Array{Boundary, 1}([top_bound, bottom_bound])
+    bounds = Array{Boundary, 1}([velneu, top_bound, bottom_bound])
 
-    stream = Array{Streaming, 1}([peri_pres, full_stream])
+    stream = Array{Streaming, 1}([full_stream])
+    println("Bounds: ", bounds)
 
-    compute(grid, d2q9, bgk, stream, bounds, "pois_", t, write_inc)
+    compute!(grid, d2q9, bgk, stream, bounds, "pois_", t, write_inc)
 
 end
 
@@ -68,11 +72,9 @@ uvec ./= m_uvec
 plot(y_vec, uvec, xlabel="y / y_max", ylabel="U_x/ U_max", label="analy",
      title="Analytical vs Numeric Pois")
 plot!(y_vec,  grid.velocity[Int64(x), :, 2]./m_uvec, label="AuslassLBM Loesung")
-plot!(y_vec,  grid.velocity[Int64(x/2), :, 2]./m_uvec, label="Mitte LBM Loesung")
+#plot!(y_vec,  grid.velocity[Int64(x/2), :, 2]./m_uvec, label="Mitte LBM Loesung")
 plot!(y_vec,  grid.velocity[Int64(1), :, 2]./m_uvec, label="Einlass LBM Loesung")
 
 savefig("pois_konvergenz.eps")
 
 show()
-
-

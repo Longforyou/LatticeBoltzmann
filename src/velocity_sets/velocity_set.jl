@@ -28,7 +28,7 @@ immutable D2Q9{F<:Flow} <: _2D
       Array{Float64, 1}([0., 0., 1., 0., -1., 1., 1., -1., -1.]),
       Array{Float64, 1}([4/9, 1/9, 1/9, 1/9, 1/9,
                          1/36, 1/36, 1/36, 1/36]),
-          Dict([(North, [3, 6, 7]), (South, [5, 8, 9]),
+          Dict{DataType, Array{Int64, 1}}([(North, [3, 6, 7]), (South, [5, 8, 9]),
                 (West, [4, 7, 8]), (East, [2, 6, 9])]))
     )
 
@@ -70,7 +70,7 @@ include("macro_var.jl")
 Compute the initial values of the grid. Gets called before the first normal
 iteration.
 """
-function init_lattice_state(grid::Grid_2D, d2q9::D2Q9)
+function init_lattice_state!(grid::Grid_2D, d2q9::D2Q9)
 
 
   # The Initial values for the grid 
@@ -80,6 +80,6 @@ function init_lattice_state(grid::Grid_2D, d2q9::D2Q9)
 
   grid.f_temp = copy(grid.f_eq)
   grid.f_prop = copy(grid.f_eq)
-  compute_macro_var(grid, d2q9)
+  compute_macro_var!(grid, d2q9)
 
 end

@@ -18,10 +18,10 @@ abstract BounceCondition <: Boundary
 # ==== Boundary Function
 # ===========
 
-function compute_boundary(grid::Grid, bound::Array{Boundary, 1}, velset::Velocity_Set)
+function compute_boundary!(grid::Grid, bound::Array{Boundary, 1}, velset::Velocity_Set)
 
     for b in bound
-        boundary(grid, b, velset)
+        boundary!(grid, b, velset)
     end
 end
 
@@ -30,7 +30,6 @@ include("dirichlet.jl")
 include("open.jl")
 include("bounce.jl")
 include("corner.jl")
-# include("periodic_dirichlet.jl")
 
 export
     Boundary,
