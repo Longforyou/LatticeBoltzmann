@@ -43,4 +43,21 @@ function get_axis_vec(width, length, consts::LBM_Constants)
 
 end
 
+"""
+Compute the initial values of the grid. Gets called before the first normal
+iteration.
+"""
+function init_lattice_state!(grid::Grid_2D, velset::_2D)
+
+  # The Initial values for the grid 
+  for k in 1:length(velset.w), i in 1:grid.width, j in 1:grid.length 
+    grid.f_eq[i, j, k] = velset.w[k]
+  end
+
+  grid.f_temp = grid.f_eq
+  grid.f_prop = grid.f_eq
+  compute_macro_var!(grid, velset)
+
+end
+
 export Grid_2D

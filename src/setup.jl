@@ -2,7 +2,9 @@
 
 # Process the abstract modelling
 include("abstract_lbm.jl")
+
 using .Abstract_LBM
+
 export
     Collision,
     Streaming,
@@ -21,7 +23,6 @@ include("io/output.jl")
 include("velocity_sets/velocity_set.jl")
 include("boundary/boundary.jl")
 
-include("flow/flow.jl")
 include("streaming/streaming.jl")
 include("collision/collision.jl")
 include("analytical/analytical.jl")
@@ -43,8 +44,10 @@ export
     Compressible,
 
     # Functions
-    get_pressure_pois,
-    get_velo_pois,
+    get_pressure_pois_1,
+    get_pressure_pois_2,
+    get_velo_pois_1,
+    get_velo_pois_2,
     get_next_index,
     get_axis_vec
 

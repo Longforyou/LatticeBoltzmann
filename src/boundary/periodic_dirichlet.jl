@@ -1,7 +1,6 @@
 #! /usr/bin/env julia
-
-immutable PeriodicPressure{T <: Direction,
-                      V <: _2D} <: Boundary
+immutable PressurePeriodic_2D{T <: Direction,
+                           V <: _2D} <: Boundary
 
     rho_inlet::Float64
     rho_outlet::Float64
@@ -13,43 +12,25 @@ immutable PeriodicPressure{T <: Direction,
 end
 
 # ============================================================
-# ==== Periodic Propagation
+# ==== Periodic STreaming with Pressure condition
 # ============================================================
-function periodic_pressure(grid::Grid_2D, k::Int64,
-                           bound_row::Int64,
-                           bound_col::Array{Int64,1},
-                           bound_rho::Float64, w::Float64,
-                           c_x::Float64, c_y::Float64)
 
-    f_eq(w, bound_rho,
-         grid.velocity[bound_row, bound_col, 1].^2 .+
-         grid.velocity[bound_row, bound_col, 2].^2, 
-         c_dot_uv( grid.velocity[bound_row, bound_col, :], c_x, c_y)) .+ 
-             ( grid.f_temp[bound_row, bound_col, k]
-               .-  grid.f_eq[bound_row, bound_col, k])
-
-end 
-
-function boundary(grid::Grid_2D,
-                  bound::PeriodicPressure{West, D2Q9})
-
-    using _D2Q9: w, c_x, c_y
+function boundary!(grid::Grid_2D,
+                   PFPS::PressurePeriodic_2D{West, D2Q9}, d2q9::D2Q9)
 
     # Compute the densities for the inlet and outlet,
     # where the pressure is known
-    for k in 1:9
-        #Inlet
-        grid.f_temp[bound.inlet_row, bound.inlet_col, k] =
-            periodic_pressure(grid, k, bound.outlet_row-1,
-                              bound.outlet_col,
-                              bound.rho_inlet, w[k], c_x[k], c_y[k])
 
-        #Outlet
-        grid.f_temp[bound.outlet_row, bound.outlet_col, k] =
-            periodic_pressure(grid, k, bound.inlet_row+1,
-                              bound.inlet_col,
-                              bound.rho_outlet, w[k], c_x[k], c_y[k])
+    #Inlet
+    @fastmath @inbounds grid.f_prop[PFPS.inlet_row, PFPS.inlet_col, :] =
+        periodic_pressure(grid, d2q9, PFPS.outlet_row-1,
+                          PFPS.outlet_col,
+                          PFPS.rho_inlet)
 
-    end
+    #Outlet
+    @fastmath @inbounds grid.f_prop[PFPS.outlet_row, PFPS.outlet_col, :] =
+        periodic_pressure(grid, d2q9, PFPS.inlet_row+1,
+                          PFPS.inlet_col,
+                          PFPS.rho_outlet)
 
 end

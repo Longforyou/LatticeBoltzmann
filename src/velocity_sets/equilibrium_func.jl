@@ -16,7 +16,7 @@ function f_eq!(grid_f_eq::Array{Float64, 3}, d2q9::D2Q9,
 
     for i = 1:sz_grid[1]
         for j = 1:sz_grid[2]
-            f_eq_kernel!(grid_f_eq[i, j, :], rho[i, j], velo[i, j, 1],
+            grid_f_eq[i, j, :] = f_eq_kernel!(grid_f_eq[i, j, :], rho[i, j], velo[i, j, 1],
                          velo[i, j, 2], d2q9)
         end # j
     end # i
@@ -29,7 +29,7 @@ function f_eq(d2q9::D2Q9, rho::Float64, velo::Array{Float64, 2})
     out_f_eq = zeros(sz_grid[1], 9)
 
     for i = 1:sz_grid[1]
-            f_eq_kernel!(out_f_eq[i, :], rho, velo[i, 1], velo[i, 2], d2q9)
+        out_f_eq[i, :] = f_eq_kernel!(out_f_eq[i, :], rho, velo[i, 1], velo[i, 2], d2q9)
     end # i
 
     return out_f_eq
@@ -56,6 +56,7 @@ function f_eq_kernel!(out_f_eq::Array{Float64, 1}, rho::Float64,
     out_f_eq[8] = d2q9.w[8] * (rho + 3. * uxuy8 + 4.5 * uxuy8^2 - usq)
     out_f_eq[9] = d2q9.w[9] * (rho + 3. * uxuy9 + 4.5 * uxuy9^2 - usq)
 
+    return out_f_eq
 end
 
 function f_eq_kernel!(out_f_eq::Array{Float64, 1}, rho::Float64,
@@ -77,4 +78,5 @@ function f_eq_kernel!(out_f_eq::Array{Float64, 1}, rho::Float64,
     out_f_eq[8] = d2q9.w[8] * (rho + 3. * uxuy8)
     out_f_eq[9] = d2q9.w[9] * (rho + 3. * uxuy9)
 
+    return out_f_eq
 end

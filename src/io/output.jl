@@ -17,6 +17,8 @@ function write_vtk(grid::Grid_2D, name::String, step::Int64)
     vtk_point_data(vtk_f, grid.density, "Density")
     vtk_velocity = grid.velocity ./ grid.density
 
+    #println("VTK_Velocity: ", vtk_velocity)
+
     # Velocities are swapped! Since julia uses column major formats..
     vtk_point_data(vtk_f, vtk_velocity[:, :, 1], "y-Velocity")
     vtk_point_data(vtk_f, vtk_velocity[:, :, 2], "x-Velocity")

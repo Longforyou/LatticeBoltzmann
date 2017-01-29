@@ -26,8 +26,7 @@ immutable D2Q9{F<:Flow} <: _2D
       # Some constant fields
       new(Array{Float64, 1}([0., 1., 0., -1., 0., 1., -1., -1., 1.]), 
       Array{Float64, 1}([0., 0., 1., 0., -1., 1., 1., -1., -1.]),
-      Array{Float64, 1}([4/9, 1/9, 1/9, 1/9, 1/9,
-                         1/36, 1/36, 1/36, 1/36]),
+      Array{Float64, 1}([4/9, 1/9, 1/9, 1/9, 1/9, 1/36, 1/36, 1/36, 1/36]),
           Dict{DataType, Array{Int64, 1}}([(North, [3, 6, 7]), (South, [5, 8, 9]),
                 (West, [4, 7, 8]), (East, [2, 6, 9])]))
     )
@@ -62,24 +61,3 @@ using ._D2Q9
 include("equilibrium_func.jl")
 include("macro_var.jl")
 
-# Type definition for the lattice boltzmann 2D mesh
-
-"""
-    init_lattice_state(lbm, w)
-
-Compute the initial values of the grid. Gets called before the first normal
-iteration.
-"""
-function init_lattice_state!(grid::Grid_2D, d2q9::D2Q9)
-
-
-  # The Initial values for the grid 
-  for k = 1:9, i = 1:grid.width, j = 1:grid.length 
-    @inbounds grid.f_eq[i, j, k] = copy(d2q9.w[k])
-  end
-
-  grid.f_temp = copy(grid.f_eq)
-  grid.f_prop = copy(grid.f_eq)
-  compute_macro_var!(grid, d2q9)
-
-end

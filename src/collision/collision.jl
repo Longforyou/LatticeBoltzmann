@@ -9,7 +9,8 @@ immutable BGK <: Collision
     omega::Float64
 
     function BGK(consts::LBM_Constants)
-        omega = 1. / consts.tau
+        omega = 1. / consts.tau;
+        println("Omega: ", omega)
         new(omega)
     end
 end
