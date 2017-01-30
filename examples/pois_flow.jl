@@ -4,11 +4,11 @@ using Plots, LatticeBoltzmann,
     LatticeBoltzmann._D2Q9
 
 # Grid example
-scale = 50
+scale = 10
 x = 20 * scale
 y = 5 * scale
-t =  4e0 * x
-write_inc = 5 #:w20 # After 50 Iter a file is created
+t =  8e2 * x
+write_inc = 0 #:w20 # After 50 Iter a file is created
 U = 0.1 
 H = 1.
 L = 4. * H
@@ -60,7 +60,7 @@ end
 
 # Analytical solution
 y_vec = Array{Float64}(1:y) - 0.5
-uvec = get_velo_pois_2(Float64(x), Float64(y), consts, y_vec)
+uvec = get_velo_pois_2(Float64(x), Float64(y-1), consts, y_vec)
 
 # Norm the results
 y_vec ./= y
