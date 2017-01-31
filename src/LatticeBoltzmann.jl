@@ -11,11 +11,17 @@ using  ProgressMeter, WriteVTK #, ParallelAccelerator
 include("setup.jl")
 
 """
-   compute(lbm, name, tim_step [,write_inc=0])
+   compute(grid, velset, collision, stream, bound, name, tim_step [,write_inc=0])
 
 Computes all steps defined by the Array `time_step' on the lattice boltzmann
-model specified by `lbm'. If `write_inc' is 0, only the first and last
-time_step are stored. Else every `write_inc' step is written into a 'vtr' file.
+model specified by the following variables.
+* grid::Grid | contains all Arrays for the computation
+* velset::Velocity_Set | contains the description of the Velocity Setting
+* collision::Collision | specifies the collision operator
+* stream::Array{Streaming, 1} | contains the description of streaming operations
+* bound::Array{Boundary, 1} | contains all boundary conditions of the models
+ If `write_inc' is 0, only the first and last
+time_step are stored. Else every `write_inc' step is written into a 'vtr' file. Not that this has an direct influence on the performance.
 
 """
 function compute!(grid::Grid, velset::Velocity_Set,
@@ -67,12 +73,11 @@ end
 
 Computes all individual steps needed in one iteration of the lattice boltzmann
 scheme. 
-  1. equilibrium distribution function
-  2. collision operator ( only the BGK is implemented)
-  3. periodic pressure conditions ( if there are any in the field `bound')
-  4. steaming of the distributions to neighbouring nodes
-  5. bounce backs on the values specified in all `BounceCondition' objects in
-  `bound'
+  1. collision operator ( only the BGK is implemented)
+  2. steaming of the distributions to neighbouring nodes
+  3. computation of the passed boundary conditions
+  4. computation of the macroskopic variables
+  5. equilibrium distribution function
 """
 function step!(grid::Grid, velset::Velocity_Set, collision::Collision,
               stream::Array{Streaming, 1}, bound::Array{Boundary, 1})

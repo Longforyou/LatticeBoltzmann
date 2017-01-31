@@ -1,5 +1,10 @@
 #! /usr/bin/env julia
 
+"""
+    FullPeriodicStreaming_2D
+
+Streaming operator for the streaming of the entire domain.
+"""
 immutable FullPeriodicStreaming_2D <: Streaming
     rows::UnitRange{Int64}
     cols::UnitRange{Int64}
@@ -11,9 +16,15 @@ immutable FullPeriodicStreaming_2D <: Streaming
 
 end
 
-abstract InnerStreaming <: Streaming
+abstract InnerStreaming <: Streaming #TODO implement different operators..
 
-# =========== Streaming
+"""
+    compute_streaming!(grid, stream, velset)
+
+Interface function for the computation of all passed Array of
+Streaming-Operators `stream`. The dispatch is done via the
+function `streaming!`.
+"""
 function compute_streaming!(grid::Grid, stream::Array{Streaming, 1}, velset::Velocity_Set)
     for stre in stream
         # println("Pre ", stre, "\nPopulation\n", grid.f_prop)
@@ -22,6 +33,13 @@ function compute_streaming!(grid::Grid, stream::Array{Streaming, 1}, velset::Vel
     end
 end
 
+"""
+    streaming!(FPS, grid, d2q9)
+
+FullPeriodicStreaming_2D operator definition. Performs circshifts
+on different dimensions of the collided particles to the neighbouring
+particles.
+"""
 function streaming!(FPS::FullPeriodicStreaming_2D, grid::Grid_2D,
                     d2q9::D2Q9)
 
@@ -38,6 +56,15 @@ function streaming!(FPS::FullPeriodicStreaming_2D, grid::Grid_2D,
     
 end
 
+# ============================================================
+# ==== Periodic STreaming with Pressure condition
+# ============================================================
+
+"""
+    PressurePeriodicStream_2D
+
+Contains a description of a periodic pressure/ density gradient.
+"""
 immutable PressurePeriodicStream_2D{T <: Direction,
                            V <: _2D} <: Streaming
 
@@ -50,9 +77,11 @@ immutable PressurePeriodicStream_2D{T <: Direction,
 
 end
 
-# ============================================================
-# ==== Periodic STreaming with Pressure condition
-# ============================================================
+"""
+    periodic_pressure(grid, d2q9, bound_row, bound_col, bound_rho)
+
+Function to interface the function `f_eq` in order to compute the value of the discrete distribution function. **NOTE** that the object of the type `PressurePeriodicStream_2D` has to be computed --before-- the streaming of the domain.
+"""
 function periodic_pressure(grid::Grid_2D, d2q9::D2Q9,
                            bound_row::Int64,
                            bound_col::Array{Int64,1},
@@ -63,6 +92,12 @@ function periodic_pressure(grid::Grid_2D, d2q9::D2Q9,
 
 end 
 
+"""
+    streaming(PFPS, grid, d2q9)
+
+Streaming-Operator implementation for the type `PressurePeriodicStream`.
+TODO implement different direction of different directions.
+"""
 function streaming!(PFPS::PressurePeriodicStream_2D{West, D2Q9}, grid::Grid_2D,
                     d2q9::D2Q9)
 
