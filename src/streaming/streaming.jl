@@ -51,7 +51,7 @@ immutable PressurePeriodicStream_2D{T <: Direction,
 end
 
 # ============================================================
-# ==== Periodic STreaming with Pressure condition
+# ==== Periodic Streaming with Pressure condition
 # ============================================================
 function periodic_pressure(grid::Grid_2D, d2q9::D2Q9,
                            bound_row::Int64,

@@ -17,6 +17,7 @@ module _D2Q9
   using ..Abstract_LBM
 
 immutable D2Q9{F<:Flow} <: _2D
+    
     c_x::Array{Float64, 1}
     c_y::Array{Float64, 1}
     w::Array{Float64, 1}

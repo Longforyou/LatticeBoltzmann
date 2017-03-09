@@ -47,7 +47,7 @@ function compute!(grid::Grid, velset::Velocity_Set,
         write_vtk(grid, name, 2)
     else
         cd(vtk_dir)
-        @showprogress 3 "Computing..." for i_stel = 1.:time_step
+        @showprogress 3 "Computing..." for i_step = 1.:time_step
             step!(grid, velset, collision, stream, bound)
 
             if i % write_inc == 0

@@ -4,11 +4,11 @@ using Plots, LatticeBoltzmann,
     LatticeBoltzmann._D2Q9
 
 # Grid example
-scale = 50
+scale = 5
 x = 20 * scale
 y = 5 * scale
-t =  4e0 * x
-write_inc = 5 #:w20 # After 50 Iter a file is created
+t =  4e2 * x
+write_inc = 20 # After 50 Iter a file is created
 U = 0.1 
 H = 1.
 L = 4. * H
