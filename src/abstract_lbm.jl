@@ -19,6 +19,10 @@ abstract South <: Direction
 abstract West <: Direction
 abstract East <: Direction
 
+
+# Grid is seperated into the two parts. The individual lattice and the grid which holds all lattices
+abstract Particle
+
 abstract Grid
 abstract _1D <: Velocity_Set
 abstract _2D <: Velocity_Set
@@ -34,6 +38,7 @@ abstract BGK <: Collision
 export
     Collision,
     Streaming,
+    Particle,
     Grid, Velocity_Set,
     _1D,_2D, _3D,
     Flow, Direction,

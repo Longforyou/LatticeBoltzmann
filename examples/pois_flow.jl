@@ -7,7 +7,7 @@ using Plots, LatticeBoltzmann,
 scale = 5
 x = 20 * scale
 y = 5 * scale
-t =  4e2 * x
+t =  20. * x
 write_inc = 20 # After 50 Iter a file is created
 U = 0.1 
 H = 1.

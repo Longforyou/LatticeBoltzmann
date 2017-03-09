@@ -20,7 +20,7 @@ function compute_collision!(grid::Grid_2D, collision::Collision)
 
     # The collision of the particles is indepentend of
     # the particle type
-    grid.f_temp = collide(collision, grid)
+    collide!(collision, grid.lattices)
 
 end
 
@@ -28,9 +28,12 @@ end
 # The BGK-Operator relaxates the population 'f_prop'
 #  to a equilibrium function.
 # """
-function collide(bgk::BGK, grid::Grid_2D)
-    return grid.f_prop .* (1. - bgk.omega) .+
-        grid.f_eq .* bgk.omega
+function collide!(bgk::BGK, lattice::Array{Lattice})
+
+    for index = size(lattice)
+        
+        lattice[index].f_temp = lattice[index].f_prop .* (1. - bgk.omega) .+ lattice[index].f_eq .* bgk.omega
+    end
 end
 
 # Make them available

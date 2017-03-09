@@ -17,6 +17,9 @@ export
 
 
 include("constants/constants.jl")
+include("grid/lattice.jl")
+using ._Lattice
+
 include("grid/grid.jl")
 
 include("io/output.jl")

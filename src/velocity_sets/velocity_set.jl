@@ -15,6 +15,7 @@ make the weights w and the direction arrays c_x & c_y
 
 module _D2Q9
   using ..Abstract_LBM
+  using .._Lattice
 
 immutable D2Q9{F<:Flow} <: _2D
     
@@ -34,6 +35,10 @@ immutable D2Q9{F<:Flow} <: _2D
 
   end
 
+function velo!(lattice::Lattice)
+  lattice.velocity[1] = velo_1(lattice.f_prop)  
+  lattice.velocity[2] = velo_2(lattice.f_prop)  
+end
 
 function velo_1(f_prop::Array{Float64, 1})
 
