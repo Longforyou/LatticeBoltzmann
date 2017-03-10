@@ -25,17 +25,9 @@ end
 function streaming!(FPS::FullPeriodicStreaming_2D, grid::Grid_2D,
                     d2q9::D2Q9)
 
+                    println("Streaming")
     # Distribution direction
-    # grid.f_prop[FPS.rows, FPS.cols, 1] = grid.f_temp[FPS.rows, FPS.cols, 1]
-    # grid.f_prop[FPS.rows, FPS.cols, 2] = circshift(grid.f_temp[FPS.rows, FPS.cols, 2],[ 0  1])
-    # grid.f_prop[FPS.rows, FPS.cols, 3] = circshift(grid.f_temp[FPS.rows, FPS.cols, 3],[ 1  0])
-    # grid.f_prop[FPS.rows, FPS.cols, 4] = circshift(grid.f_temp[FPS.rows, FPS.cols, 4],[ 0 -1])
-    # grid.f_prop[FPS.rows, FPS.cols, 5] = circshift(grid.f_temp[FPS.rows, FPS.cols, 5],[-1  0])
-    # grid.f_prop[FPS.rows, FPS.cols, 6] = circshift(grid.f_temp[FPS.rows, FPS.cols, 6],[ 1  1])
-    # grid.f_prop[FPS.rows, FPS.cols, 7] = circshift(grid.f_temp[FPS.rows, FPS.cols, 7],[ 1 -1])
-    # grid.f_prop[FPS.rows, FPS.cols, 8] = circshift(grid.f_temp[FPS.rows, FPS.cols, 8],[-1 -1])
-    # grid.f_prop[FPS.rows, FPS.cols, 9] = circshift(grid.f_temp[FPS.rows, FPS.cols, 9],[-1  1])
-
+    println("Pre \n", grid.lattices[1,3].f_prop)
     for i = 1:grid.width 
         i_n = get_next_index(grid, i, grid.width)
         i_p = get_prev_index(grid, i, grid.width)
@@ -55,6 +47,7 @@ function streaming!(FPS::FullPeriodicStreaming_2D, grid::Grid_2D,
             grid.lattices[i_n, j_p].f_prop[9] = grid.lattices[i, j].f_temp[9]
         end
     end
+    println("Post \n", grid.lattices[1,3].f_prop)
 end
 
 immutable PressurePeriodicStream_2D{T <: Direction,
@@ -103,7 +96,8 @@ function streaming!(PFPS::PressurePeriodicStream_2D{West, D2Q9}, grid::Grid_2D,
     # Compute the densities for the inlet and outlet,
     # where the pressure is known
 
-    # grid.f_temp[PFPS.inlet_row, PFPS.inlet_col, :] =
+    println("Streaming Peri Pres")
+    println("Pre \n", grid.lattices[1,3].f_prop)
     for i = 1:PFPS.length_col
         #Inlet
         periodic_pressure!(grid, d2q9, 
@@ -117,6 +111,7 @@ function streaming!(PFPS::PressurePeriodicStream_2D{West, D2Q9}, grid::Grid_2D,
              PFPS.inlet_row+1, PFPS.inlet_col[i],
                 PFPS.rho_inlet)
     end
+    println("Post \n", grid.lattices[1,3].f_prop)
 
 end
 

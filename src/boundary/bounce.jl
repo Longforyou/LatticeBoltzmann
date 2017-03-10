@@ -9,6 +9,7 @@ end
 function bounce_lattice!(lattices::Array{Lattice}, bounce::Bounce,
           to_arr::Array{Int64, 1}, from_arr::Array{Int64, 1})
 
+    println("Bouncing")
     println("Pre\n", lattices[5].f_prop)
     for row in bounce.rows, col in bounce.cols
         @inbounds lattices[row, col].f_prop[to_arr] = lattices[row, col].f_temp[from_arr]
