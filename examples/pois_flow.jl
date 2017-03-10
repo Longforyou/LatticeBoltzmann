@@ -4,10 +4,10 @@ using Plots, LatticeBoltzmann,
     LatticeBoltzmann._D2Q9
 
 # Grid example
-scale = 1
+scale = 5
 x = 5 * scale
 y = 5 * scale
-t =  4e0 * x
+t =  2. * x
 write_inc = 5 #:w20 # After 50 Iter a file is created
 U = 0.1 
 H = 1.
@@ -38,21 +38,19 @@ function pois_compr(consts::LBM_Constants, grid::Grid_2D, d2q9::D2Q9{Compressibl
     const top_bound = Bounce{North, D2Q9}(Array{Int64}(1:x), [1])
     const bottom_bound = Bounce{South, D2Q9}(Array{Int64}(1:x), [y])
 
-    rho_out = rho_luft
-    rho_in = rho_out + 3. * get_pressure_pois(consts)
+    rho_out = 1.
+    rho_in = rho_out + get_pressure_pois_2(Float64(x), Float64(y), consts)
     println("Rho_in: ", rho_in, "\n Rho_out: ", rho_out)
+
     peri_pres = PressurePeriodicStream_2D{West, D2Q9}(rho_in, rho_out,
                                              1, Array{Int64}(1:y),
                                                       x, Array{Int64}(1:y))
 
-    velneu = Neumann{West, NonEqBounce, D2Q9}(consts.U, [1],
-                                              Array{Int64}( 1:y ))
     full_stream = FullPeriodicStreaming_2D(grid)
 
-    bounds = Array{Boundary, 1}([velneu, top_bound, bottom_bound])
+    bounds = Array{Boundary, 1}([top_bound, bottom_bound])
 
-    stream = Array{Streaming, 1}([full_stream])
-    println("Bounds: ", bounds)
+    stream = Array{Streaming, 1}([peri_pres, full_stream])
 
     compute!(grid, d2q9, bgk, stream, bounds, "pois_", t, write_inc)
 
@@ -61,19 +59,19 @@ end
 @time pois_compr(consts, grid, d2q9, t)
 
 # Analytical solution
-y_vec = Array{Float64}((0:y-1))
-uvec = get_velo_pois(Float64(x), Float64(y-1), consts, y_vec)
+y_vec = Array{Float64}(1:y) - 0.5
+uvec = get_velo_pois_2(Float64(x), Float64(y), consts, y_vec)
 
 # Norm the results
 y_vec ./= y
-m_uvec = U / uvec[indmax(uvec)]
+m_uvec = uvec[indmax(uvec)]
 uvec ./= m_uvec
 
 plot(y_vec, uvec, xlabel="y / y_max", ylabel="U_x/ U_max", label="analy",
      title="Analytical vs Numeric Pois")
-plot!(y_vec,  grid.velocity[Int64(x), :, 2]./m_uvec, label="AuslassLBM Loesung")
+plot!(y_vec,  grid.velocity[Int64(x), :, 2]./m_uvec ./grid.density[Int64(x), :], label="AuslassLBM Loesung")
 #plot!(y_vec,  grid.velocity[Int64(x/2), :, 2]./m_uvec, label="Mitte LBM Loesung")
-plot!(y_vec,  grid.velocity[Int64(1), :, 2]./m_uvec, label="Einlass LBM Loesung")
+plot!(y_vec,  grid.velocity[Int64(1), :, 2]./m_uvec ./grid.density[Int64(x), :], label="Einlass LBM Loesung")
 
 savefig("pois_konvergenz.eps")
 
