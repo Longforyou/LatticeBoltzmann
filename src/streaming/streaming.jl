@@ -44,15 +44,15 @@ function streaming!(FPS::FullPeriodicStreaming_2D, grid::Grid_2D,
             j_n = get_next_index(grid, j, grid.length)
             j_p = get_prev_index(grid, j, grid.length)
 
-            grid.lattices[i, j].f_prop = grid.lattices[i, j].f_temp[1]
-            grid.lattices[i, j_p].f_prop = grid.lattices[i, j].f_temp[2]
-            grid.lattices[i_p, j].f_prop = grid.lattices[i, j].f_temp[3]
-            grid.lattices[i, j_n].f_prop = grid.lattices[i, j].f_temp[4]
-            grid.lattices[i_n, j].f_prop = grid.lattices[i, j].f_temp[5]
-            grid.lattices[i_p, j_p].f_prop = grid.lattices[i, j].f_temp[6]
-            grid.lattices[i_p, i_n].f_prop = grid.lattices[i, j].f_temp[7]
-            grid.lattices[i_n, j_n].f_prop = grid.lattices[i, j].f_temp[8]
-            grid.lattices[i_n, j_p].f_prop = grid.lattices[i, j].f_temp[9]
+            grid.lattices[i, j].f_prop[1] = grid.lattices[i, j].f_temp[1]
+            grid.lattices[i, j_p].f_prop[2] = grid.lattices[i, j].f_temp[2]
+            grid.lattices[i_p, j].f_prop[3] = grid.lattices[i, j].f_temp[3]
+            grid.lattices[i, j_n].f_prop[4] = grid.lattices[i, j].f_temp[4]
+            grid.lattices[i_n, j].f_prop[5] = grid.lattices[i, j].f_temp[5]
+            grid.lattices[i_p, j_p].f_prop[6] = grid.lattices[i, j].f_temp[6]
+            grid.lattices[i_p, j_n].f_prop[7] = grid.lattices[i, j].f_temp[7]
+            grid.lattices[i_n, j_n].f_prop[8] = grid.lattices[i, j].f_temp[8]
+            grid.lattices[i_n, j_p].f_prop[9] = grid.lattices[i, j].f_temp[9]
         end
     end
 end
@@ -66,14 +66,14 @@ immutable PressurePeriodicStream_2D{T <: Direction,
     inlet_col::Array{Int64, 1}
     outlet_row::Int64
     outlet_col::Array{Int64, 1}
-    indices::Tuple{Base.OnTo{Int64}}
+    length_col::Int64
 
     PressurePeriodicStream_2D(rho_inlet, rho_outlet, 
         inlet_row, inlet_col, outlet_row, outlet_col) = (
             @assert (size(inlet_col) == size(outlet_col));
 
             new(rho_inlet, rho_outlet, inlet_row, inlet_col,
-                outlet_row, outlet_col, indices([inlet_row, inlet_col]))
+                outlet_row, outlet_col, length(inlet_col))
         )
 
 end
@@ -83,13 +83,15 @@ end
 # ============================================================
 function periodic_pressure!(grid::Grid_2D, d2q9::D2Q9,
                            bound_in_row::Int64,
-                           bound_in_col::Array{Int64, 1},
+                           bound_in_col::Int64,
                            bound_out_row::Int64,
-                           bound_out_col::Array{Int64,1},
+                           bound_out_col::Int64,
                            bound_rho::Float64)
 
+    
+    
     grid.lattices[bound_in_row, bound_in_col].f_temp = 
-        f_eq(d2q9, grid.lattices[bound_out_row, bound_out_col], bound_rho)
+        f_eq(grid.lattices[bound_out_row, bound_out_col], d2q9, bound_rho) .+
              (grid.lattices[bound_out_row, bound_out_col].f_temp .-  
              grid.lattices[bound_out_row, bound_out_col].f_eq)
 
@@ -100,18 +102,21 @@ function streaming!(PFPS::PressurePeriodicStream_2D{West, D2Q9}, grid::Grid_2D,
 
     # Compute the densities for the inlet and outlet,
     # where the pressure is known
-    #Inlet
+
     # grid.f_temp[PFPS.inlet_row, PFPS.inlet_col, :] =
+    for i = 1:PFPS.length_col
+        #Inlet
         periodic_pressure!(grid, d2q9, 
-             PFPS.inlet_row, PFPS.inlet_col ,
-             PFPS.outlet_row-1, PFPS.outlet_col ,
+             PFPS.inlet_row, PFPS.inlet_col[i],
+             PFPS.outlet_row-1, PFPS.outlet_col[i] ,
                 PFPS.rho_inlet)
 
-    #Outlet
-    grid.f_temp[PFPS.outlet_row, PFPS.outlet_col, :] =
-        periodic_pressure(grid, d2q9, PFPS.inlet_row+1,
-                          PFPS.inlet_col,
-                          PFPS.rho_outlet)
+        #Outlet
+        periodic_pressure!(grid, d2q9, 
+             PFPS.outlet_row, PFPS.outlet_col[i] ,
+             PFPS.inlet_row+1, PFPS.inlet_col[i],
+                PFPS.rho_inlet)
+    end
 
 end
 

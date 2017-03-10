@@ -6,29 +6,28 @@
 # """
 # =========== Equilibrium Distribution function
 function compute_f_eq!(grid::Grid_2D, velset::_2D)
-    @inbounds @fastmath f_eq!(grid.lattices, velset)
+    f_eq!(grid.lattices, velset)
 end
 
 function f_eq!(grid_lattices::Array{Lattice, 2}, d2q9::D2Q9)
 
     sz_grid = size(grid_lattices)
 
+    println("Pre EQ:", grid_lattices[3,3].f_eq)
     for i = 1:sz_grid[1]
         for j = 1:sz_grid[2]
             f_eq_kernel!(grid_lattices[i, j], d2q9)
         end # j
     end # i
+    println("Post EQ:", grid_lattices[3,3].f_eq)
 end # f_eq
 
 # For the boundary compuations
-function f_eq(d2q9::D2Q9, lattice::Array{Lattice}, rho::Float64)
-    sz_grid = size(lattice)
+function f_eq(lattice::Lattice, velset::_2D, rho::Float64)
 
-    for i = 1:sz_grid[1]
-        f_eq_kernel!(lattice[i], d2q9, rho)
-    end # i
+    f_eq_kernel!(lattice, velset, rho)
 
-    return lattice
+    return lattice.f_eq
 end # f_eq
 
 function f_eq_kernel!(lattice::Lattice, d2q9::D2Q9{Compressible})

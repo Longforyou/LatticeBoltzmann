@@ -4,14 +4,14 @@ using Plots, LatticeBoltzmann,
     LatticeBoltzmann._D2Q9
 
 # Grid example
-scale = 5
-x = 20 * scale
+scale = 1
+x = 5 * scale
 y = 5 * scale
-t =  20. * x
-write_inc = 20 # After 50 Iter a file is created
+t =  5. # * x
+write_inc = 1 # 20 # After 50 Iter a file is created
 U = 0.1 
 H = 1.
-L = 4. * H
+L = 1. * H
 nu_luft = 153.2e-7
 mu_luft = 12.205e-6
 rho_luft = 1.189

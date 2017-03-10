@@ -32,7 +32,6 @@ function compute!(grid::Grid, velset::Velocity_Set,
     println("Run a LatticeBoltzmann-Simulation with ",
             time_step, " step.")
   
-  println("INITIALISE LATTICE NODES...")
   init_lattice_state!(grid, velset)
 
   i = 1
@@ -76,9 +75,6 @@ scheme.
 """
 function step!(grid::Grid, velset::Velocity_Set, collision::Collision,
               stream::Array{Streaming, 1}, bound::Array{Boundary, 1})
-
-    # println("Velocity\n", grid.velocity)
-    # println("Density\n:", grid.density)
 
     compute_collision!(grid, collision)
     compute_streaming!(grid, stream, velset)

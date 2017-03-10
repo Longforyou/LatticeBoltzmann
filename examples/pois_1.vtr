@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VTKFile type="RectilinearGrid" version="1.0" byte_order="LittleEndian" compressor="vtkZLibDataCompressor" header_type="UInt32">
-  <RectilinearGrid WholeExtent="0 99 0 24 0 0">
-    <Piece Extent="0 99 0 24 0 0">
+  <RectilinearGrid WholeExtent="0 4 0 4 0 0">
+    <Piece Extent="0 4 0 4 0 0">
       <Coordinates>
         <DataArray type="Float64" Name="x" format="binary" NumberOfComponents="1">
-AQAAACADAAAgAwAA/wEAAA==eJwtk31klXEUx5/78tz3l5lllnE1KdM0I1li5zspWZZZsixTUsYss0lZpiRiYmLGmJgU+2dGmkhcY8yY0lzLlG26vSy36ba7u/e79bvnnJ+Hx+/8zu97vt/P47EsWVfjjcNzYy9J3m/IF+tJT3jjup+kqo7W8zNfprX+kXhbMqvnCTpX3HLn09nP2jdPpVOd5vmq/Yt0//SZGwsflvTeN7rVX39y/mZS73+nhlRTILH9Q3V+Ebc/W1a933R0qP319JGU6v6hwszdJ5PvV1T/Lz18hdFr5WmdkyYjYpT+6bxVasvVPWqOr+rcDF0vz09c0/lrdJlXVn1k6YLpbhxeVz8bVGvUG1Ib6muTjIhR2lJ/W1Rh5ydsq88dKuODHfW7SyxTnFPfOQr3dhupPfW/T67xBybBvuawkK/GeixIHgv3zK3nhxyQXA50sbADks+J22bqULsTktMJLhe6IHldyLsefOuC5HaD7bS4IfnduGJSDzhtCAcbl0y1aMSG8LBxkQN7IFw8YPmMB8LHC8Yy6IVw8qJmc+lxtMYH4eXDqb5kdV/SB+Hmx4nDP1dCvX4IPz8q3y2/eHo8AOEYANtMBCA8g+D27iCEaxCMLRaC8A3hIIMNQTiHcWAke8xuC0N4h1HAhiIQ7hFw3PEIhH8UPLY5CvkOUchfUYD/v8ZY2g==
+AQAAACgAAAAoAAAAFwAAAA==eJxjYEAGF+wh9AMo/QJKf7AHADzEBIU=
 </DataArray>
         <DataArray type="Float64" Name="y" format="binary" NumberOfComponents="1">
-AQAAAMgAAADIAAAAVwAAAA==eJwtyTEKgDAQRNHcbE/hEdPE2t4mjVUICCIIGqKoRPEIovunGeaNMZrqjxXtRlRbtpfafenwwI78PT7gIz7hM3vhT3jGV3zDd/zAT7zgF37jj7y9N0g1
+AQAAACgAAAAoAAAAFwAAAA==eJxjYEAGF+wh9AMo/QJKf7AHADzEBIU=
 </DataArray>
         <DataArray type="Float64" Name="z" format="binary" NumberOfComponents="1">
 AQAAAAgAAAAIAAAACwAAAA==eJxjYIAAAAAIAAE=
@@ -15,13 +15,13 @@ AQAAAAgAAAAIAAAACwAAAA==eJxjYIAAAAAIAAE=
       </Coordinates>
       <PointData>
         <DataArray type="Float64" Name="Density" format="binary" NumberOfComponents="1">
-AQAAACBOAAAgTgAAKgAAAA==eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAeDBOIAAB
+AQAAAMgAAADIAAAAEQAAAA==eJxjZACBD/aMQ5wGAFk8HbE=
 </DataArray>
         <DataArray type="Float64" Name="x-Velocity" format="binary" NumberOfComponents="1">
-AQAAACBOAAAgTgAAOQAAAA==eJztxbENAAAIA6D+f7GbjVe4wEJyZmPbtm3btm3btm3btm3btm3btm3btm3btm3btm3bfr1kGTE6
+AQAAAMgAAADIAAAAEQAAAA==eJz79x8E6m3+DXEaAC/Pp5U=
 </DataArray>
         <DataArray type="Float64" Name="y-Velocity" format="binary" NumberOfComponents="1">
-AQAAACBOAAAgTgAAOQAAAA==eJztxbENAAAIA6D+f7GbjVe4wEJyZmPbtm3btm3btm3btm3btm3btm3btm3btm3btm3bfr1kGTE6
+AQAAAMgAAADIAAAAEQAAAA==eJz79x8E6m3+DXEaAC/Pp5U=
 </DataArray>
       </PointData>
     </Piece>

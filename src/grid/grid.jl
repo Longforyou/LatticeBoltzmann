@@ -56,11 +56,13 @@ iteration.
 """
 function init_lattice_state!(grid::Grid_2D, velset::_2D)
 
+  println("INITIALISE LATTICE NODES...")
+  
   # The Initial values for the grid 
   for i in 1:grid.width, j in 1:grid.length 
       grid.lattices[i, j].f_eq = copy(velset.w)
       grid.lattices[i, j].f_temp = copy(velset.w)
-      grid.lattices[i, j].f_eq = copy(velset.w)
+      grid.lattices[i, j].f_prop = copy(velset.w)
   end
 
   compute_macro_var!(grid, velset)
