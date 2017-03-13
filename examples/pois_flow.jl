@@ -69,9 +69,8 @@ uvec ./= m_uvec
 
 plot(y_vec, uvec, xlabel="y / y_max", ylabel="U_x/ U_max", label="analy",
      title="Analytical vs Numeric Pois")
-plot!(y_vec,  grid.velocity[Int64(x), :, 2]./m_uvec ./grid.density[Int64(x), :], label="AuslassLBM Loesung")
-#plot!(y_vec,  grid.velocity[Int64(x/2), :, 2]./m_uvec, label="Mitte LBM Loesung")
-plot!(y_vec,  grid.velocity[Int64(1), :, 2]./m_uvec ./grid.density[Int64(x), :], label="Einlass LBM Loesung")
+plot!(y_vec,  get_lattice_velocity(grid.lattices, [Int64(x)], Array(1:y),  1), label="AuslassLBM Loesung")
+plot!(y_vec,  get_lattice_velocity(grid.lattices, [1], Array(1:y),  1), label="EinlassLBM Loesung")
 
 savefig("pois_konvergenz.eps")
 

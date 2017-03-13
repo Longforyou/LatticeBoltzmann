@@ -47,6 +47,32 @@ function get_macro_var(lattice_arr::Array{Lattice})
     return density_arr, velocity_arr_x, velocity_arr_y
 end
 
-export Lattice, get_macro_var
+function valid_lattice_direction(direction::Int64)
+
+    curr_direction = direction == 1 ? 2 : (direction == 2 ? 1 : 0)
+    assert(curr_direction > 0) 
+
+    return curr_direction
+end
+
+function get_lattice_velocity(lattice_arr::Array{Lattice}, row::Array{Int64,1}, col::Array{Int64, 1}, direction::Int64, col_squeeze::Bool=true)
+
+    # Get the correct direction
+    curr_direction = valid_lattice_direction(direction)
+
+    out_arr = zeros((length(row), length(col)))
+
+    for i in 1:length(row), j in 1:length(col)
+        out_arr[i, j] = lattice_arr[i, j].velocity[direction] ./ lattice_arr[i, j].density
+    end
+
+    if col_squeeze
+        return squeeze(out_arr, 1)
+    else
+        return out_arr
+    end
+end 
+
+export Lattice, get_macro_var, get_lattice_velocity
 
 end

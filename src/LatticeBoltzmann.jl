@@ -84,6 +84,6 @@ function step!(grid::Grid, velset::Velocity_Set, collision::Collision,
 
 end
 
-export compute!
+export compute!, get_lattice_velocity
 
 end # module
