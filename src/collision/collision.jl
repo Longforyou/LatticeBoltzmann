@@ -20,12 +20,12 @@ function compute_collision!(grid::Grid_2D, collision::Collision)
 
     # The collision of the particles is indepentend of
     # the particle type
-    println("Collision")
-    print_lattice_f_temp(grid.lattices)
+    # println("Collision")
+    # print_lattice_f_temp(grid.lattices)
     collide!(collision, grid.lattices)
 
-    println("Post")
-    print_lattice_f_temp(grid.lattices)
+    # println("Post")
+    # print_lattice_f_temp(grid.lattices)
 
 end
 

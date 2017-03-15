@@ -14,7 +14,7 @@ function compute_macro_var!(grid::Grid_2D, d2q9::D2Q9)
          @inbounds @fastmath _Lattice.set_density!(grid.lattices[i, j],
             density(grid.lattices[i, j].f_prop))
          @inbounds @fastmath  _D2Q9.velo!(grid.lattices[i, j])
-            print_lattice_macro_var(grid.lattices[i, j])
+            # print_lattice_macro_var(grid.lattices[i, j])
     end
 
 

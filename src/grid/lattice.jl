@@ -34,8 +34,13 @@ function set_f_eq!(lattice::Lattice, f_eq::Array{Float64, 1})
 end
 
 function set_f_temp!(lattice::Lattice, f_temp::Array{Float64, 1})
-    println("f_temp: \n", f_temp)
+    # println("f_temp: \n", f_temp)
     lattice.f_temp = f_temp
+end
+
+function set_f_temp!(lattice::Lattice, f_temp::Array{Float64, 1}, directions::Array{Int64, 1})
+    # println("f_temp: \n", f_temp)
+    lattice.f_temp[directions] = f_temp[directions]
 end
 
 function set_f_prop!(lattice::Lattice, i::Int64, f_temp::Float64)

@@ -26,11 +26,6 @@ type Grid_2D <: Grid
         )
 end
 
-function get_next_index(grid::Grid, i::Int64, dir::Int64, c_s_i::Int64)
-    return 1 + mod(i - 1 + c_s_i + size(grid.f_prop)[dir], size(grid.f_prop)[dir])
-
-end
-
 function get_next_index(grid::Grid_2D, i::Int64, dir::Int64)
   
     i < dir ? i + 1 : 1
