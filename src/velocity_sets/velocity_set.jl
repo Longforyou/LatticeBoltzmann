@@ -17,15 +17,12 @@ module _D2Q9
   using ..Abstract_LBM
 
 immutable D2Q9{F<:Flow} <: _2D
-    c_x::Array{Float64, 1}
-    c_y::Array{Float64, 1}
     w::Array{Float64, 1}
     dict::Dict{DataType, Array{Int64, 1}}
 
     D2Q9() = (
       # Some constant fields
-      new(Array{Float64, 1}([0., 1., 0., -1., 0., 1., -1., -1., 1.]), 
-      Array{Float64, 1}([0., 0., 1., 0., -1., 1., 1., -1., -1.]),
+      new(Array{Float64, 1}(
       Array{Float64, 1}([4/9, 1/9, 1/9, 1/9, 1/9, 1/36, 1/36, 1/36, 1/36]),
           Dict{DataType, Array{Int64, 1}}([(North, [3, 6, 7]), (South, [5, 8, 9]),
                 (West, [4, 7, 8]), (East, [2, 6, 9])]))

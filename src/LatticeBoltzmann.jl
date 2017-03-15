@@ -77,13 +77,9 @@ scheme.
 function step!(grid::Grid, velset::Velocity_Set, collision::Collision,
               stream::Array{Streaming, 1}, bound::Array{Boundary, 1})
 
-    println("Velocity\n", grid.velocity ./ grid.density)
-    println("Density\n:", grid.density)
 
     compute_collision!(grid, collision)
-    println("F_temp\n:", grid.f_temp)
     compute_streaming!(grid, stream, velset)
-    println("F_prop\n:", grid.f_prop)
     compute_boundary!(grid, bound, velset)
     compute_macro_var!(grid, velset)
     compute_f_eq!(grid, velset)
