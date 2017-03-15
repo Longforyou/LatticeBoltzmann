@@ -42,11 +42,11 @@ function set_f_prop!(lattice::Lattice, i::Int64, f_temp::Float64)
     lattice.f_prop[i] = f_temp
 end
 
-function set_density(lattice::Lattice, d::Float64)
+function set_density!(lattice::Lattice, d::Float64)
     lattice.density = d
 end
 
-function set_velocity(lattice::Lattice, velo::Array{Float64, 1})
+function set_velocity!(lattice::Lattice, velo::Array{Float64, 1})
     lattice.velocity = velo
 end
 
