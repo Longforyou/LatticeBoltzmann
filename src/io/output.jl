@@ -22,6 +22,11 @@ function write_vtk(grid::Grid_2D, name::String, step::Int64)
 
     vtk_save(vtk_f)
 
+    # Free up the space
+    vtk_density = 0
+    vtk_x_vel = 0
+    vtk_y_vel = 0
+
 end
 
 # =========== Util functions ===========

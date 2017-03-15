@@ -10,21 +10,20 @@ function bounce_lattice!(lattices::Array{Lattice}, bounce::Bounce,
           to_arr::Array{Int64, 1}, from_arr::Array{Int64, 1})
 
     println("Bouncing")
-    println("Pre\n", lattices[5].f_prop)
-    for row in bounce.rows, col in bounce.cols
-        @inbounds lattices[row, col].f_prop[to_arr] = lattices[row, col].f_temp[from_arr]
+    for row in bounce.rows, col in bounce.cols, i in 1:size(to_arr)[1]
+
+        _Lattice.set_f_prop!(lattices[row, col], to_arr[i], lattices[row, col].f_temp[from_arr[i]])
     end
-    println("Post\n", lattices[5].f_prop)
 end
 
 function boundary!(grid::Grid_2D,
                   bound::Bounce{North, D2Q9},
                   d2q9::D2Q9)
     
-    # grid.lattices[bound.rows, bound.cols].fprop[d2q9dict[South]] =
-    #   grid.lattices[bound.rows, bound.cols].f_temp[d2q9dict[North]]
+    println("Pre\n", grid.lattices[5,1].f_prop)
     bounce_lattice!(grid.lattices, bound,
      d2q9.dict[South], d2q9.dict[North])
+    println("Post\n", grid.lattices[5,1].f_prop)
 end
 
 function boundary!(grid::Grid_2D,

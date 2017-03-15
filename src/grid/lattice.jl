@@ -2,6 +2,12 @@
 
 module _Lattice
 using ..Abstract_LBM
+"""
+    _Lattice
+
+Contains a description of the type *Lattice*, which is a container for the populations of a lattice boltzmann modell.
+All 
+"""
 
 type Lattice <: Particle
     
@@ -22,6 +28,27 @@ type Lattice <: Particle
     )
 
 end 
+
+function set_f_eq!(lattice::Lattice, f_eq::Array{Float64, 1})
+    lattice.f_eq = f_eq
+end
+
+function set_f_temp!(lattice::Lattice, f_temp::Array{Float64, 1})
+    println("f_temp: \n", f_temp)
+    lattice.f_temp = f_temp
+end
+
+function set_f_prop!(lattice::Lattice, i::Int64, f_temp::Float64)
+    lattice.f_prop[i] = f_temp
+end
+
+function set_density(lattice::Lattice, d::Float64)
+    lattice.density = d
+end
+
+function set_velocity(lattice::Lattice, velo::Array{Float64, 1})
+    lattice.velocity = velo
+end
 
 function get_macro_var(lattice_arr::Array{Lattice})
 
@@ -73,6 +100,37 @@ function get_lattice_velocity(lattice_arr::Array{Lattice}, row::Array{Int64,1}, 
     end
 end 
 
-export Lattice, get_macro_var, get_lattice_velocity
+function print_lattice_f_eq(lattice_arr::Array{Lattice})
+    for i = 1:length(lattice_arr)
+        println(lattice_arr[i].f_eq)
+    end
+    
+end 
+function print_lattice_f_prop(lattice_arr::Array{Lattice})
+    for i = 1:length(lattice_arr)
+        println(lattice_arr[i].f_prop)
+    end
+    
+end 
+function print_lattice_f_temp(lattice_arr::Array{Lattice})
+    for i = 1:length(lattice_arr)
+        println(lattice_arr[i].f_temp)
+    end
+    
+end 
+
+function print_lattice_macro_var(lattice::Lattice)
+    println("Velocity: ", lattice.velocity ./ lattice.density)
+    println("Density: ", lattice.density)
+end
+
+export 
+    Lattice,
+    get_macro_var,
+    get_lattice_velocity,
+    print_lattice_f_eq,
+    print_lattice_f_prop,
+    print_lattice_f_temp,
+    print_lattice_macro_var
 
 end

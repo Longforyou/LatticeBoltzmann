@@ -22,7 +22,6 @@ type Grid_2D <: Grid
                 lattices[i, j] = Lattice(directions, 2);
               end
             end;
-
             new(x, y, width, length, directions, lattices);
         )
 end

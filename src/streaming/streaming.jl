@@ -25,9 +25,11 @@ end
 function streaming!(FPS::FullPeriodicStreaming_2D, grid::Grid_2D,
                     d2q9::D2Q9)
 
-                    println("Streaming")
+    println("Streaming")
     # Distribution direction
-    println("Pre \n", grid.lattices[1,3].f_prop)
+    println("Pre \n")
+    print_lattice_f_prop(grid.lattices)
+
     for i = 1:grid.width 
         i_n = get_next_index(grid, i, grid.width)
         i_p = get_prev_index(grid, i, grid.width)
@@ -36,18 +38,19 @@ function streaming!(FPS::FullPeriodicStreaming_2D, grid::Grid_2D,
             j_n = get_next_index(grid, j, grid.length)
             j_p = get_prev_index(grid, j, grid.length)
 
-            grid.lattices[i, j].f_prop[1] = grid.lattices[i, j].f_temp[1]
-            grid.lattices[i, j_p].f_prop[2] = grid.lattices[i, j].f_temp[2]
-            grid.lattices[i_p, j].f_prop[3] = grid.lattices[i, j].f_temp[3]
-            grid.lattices[i, j_n].f_prop[4] = grid.lattices[i, j].f_temp[4]
-            grid.lattices[i_n, j].f_prop[5] = grid.lattices[i, j].f_temp[5]
-            grid.lattices[i_p, j_p].f_prop[6] = grid.lattices[i, j].f_temp[6]
-            grid.lattices[i_p, j_n].f_prop[7] = grid.lattices[i, j].f_temp[7]
-            grid.lattices[i_n, j_n].f_prop[8] = grid.lattices[i, j].f_temp[8]
-            grid.lattices[i_n, j_p].f_prop[9] = grid.lattices[i, j].f_temp[9]
+            _Lattice.set_f_prop!(grid.lattices[i, j], 1, grid.lattices[i, j].f_temp[1])
+            _Lattice.set_f_prop!(grid.lattices[i, j_p], 2, grid.lattices[i, j].f_temp[2])
+            _Lattice.set_f_prop!(grid.lattices[i_p, j], 3, grid.lattices[i, j].f_temp[3])
+            _Lattice.set_f_prop!(grid.lattices[i, j_n], 4, grid.lattices[i, j].f_temp[4])
+            _Lattice.set_f_prop!(grid.lattices[i_n, j], 5, grid.lattices[i, j].f_temp[5])
+            _Lattice.set_f_prop!(grid.lattices[i_p, j_p], 6, grid.lattices[i, j].f_temp[6])
+            _Lattice.set_f_prop!(grid.lattices[i_p, j_n], 7, grid.lattices[i, j].f_temp[7])
+            _Lattice.set_f_prop!(grid.lattices[i_n, j_n], 8, grid.lattices[i, j].f_temp[8])
+            _Lattice.set_f_prop!(grid.lattices[i_n, j_p], 9, grid.lattices[i, j].f_temp[9])
         end
     end
-    println("Post \n", grid.lattices[1,3].f_prop)
+    println("Post \n")
+    print_lattice_f_prop(grid.lattices)
 end
 
 immutable PressurePeriodicStream_2D{T <: Direction,
@@ -74,7 +77,7 @@ end
 # ============================================================
 # ==== Periodic Streaming with Pressure condition
 # ============================================================
-function periodic_pressure!(grid::Grid_2D, d2q9::D2Q9,
+function periodic_pressure(grid::Grid_2D, d2q9::D2Q9,
                            bound_in_row::Int64,
                            bound_in_col::Int64,
                            bound_out_row::Int64,
@@ -83,10 +86,10 @@ function periodic_pressure!(grid::Grid_2D, d2q9::D2Q9,
 
     
     
-    grid.lattices[bound_in_row, bound_in_col].f_temp = 
+    _Lattice.set_f_temp!(grid.lattices[bound_in_row, bound_in_col], 
         f_eq(grid.lattices[bound_out_row, bound_out_col], d2q9, bound_rho) .+
              (grid.lattices[bound_out_row, bound_out_col].f_temp .-  
-             grid.lattices[bound_out_row, bound_out_col].f_eq)
+             grid.lattices[bound_out_row, bound_out_col].f_eq))
 
 end 
 
@@ -97,21 +100,24 @@ function streaming!(PFPS::PressurePeriodicStream_2D{West, D2Q9}, grid::Grid_2D,
     # where the pressure is known
 
     println("Streaming Peri Pres")
-    println("Pre \n", grid.lattices[1,3].f_prop)
+    println("PPre \n")
+    print_lattice_f_temp(grid.lattices[PFPS.inlet_row, PFPS.inlet_col])
+    
     for i = 1:PFPS.length_col
         #Inlet
-        periodic_pressure!(grid, d2q9, 
+        periodic_pressure(grid, d2q9, 
              PFPS.inlet_row, PFPS.inlet_col[i],
              PFPS.outlet_row-1, PFPS.outlet_col[i] ,
                 PFPS.rho_inlet)
 
         #Outlet
-        periodic_pressure!(grid, d2q9, 
+        periodic_pressure(grid, d2q9, 
              PFPS.outlet_row, PFPS.outlet_col[i] ,
              PFPS.inlet_row+1, PFPS.inlet_col[i],
                 PFPS.rho_inlet)
     end
-    println("Post \n", grid.lattices[1,3].f_prop)
+    println("Post \n")
+    print_lattice_f_temp(grid.lattices[PFPS.inlet_row, PFPS.inlet_col])
 
 end
 
