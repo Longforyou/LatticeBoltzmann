@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VTKFile type="RectilinearGrid" version="1.0" byte_order="LittleEndian" compressor="vtkZLibDataCompressor" header_type="UInt32">
-  <RectilinearGrid WholeExtent="0 24 0 24 0 0">
-    <Piece Extent="0 24 0 24 0 0">
+  <RectilinearGrid WholeExtent="0 4 0 4 0 0">
+    <Piece Extent="0 4 0 4 0 0">
       <Coordinates>
         <DataArray type="Float64" Name="x" format="binary" NumberOfComponents="1">
-AQAAAMgAAADIAAAAVwAAAA==eJwtyTEKgDAQRNHcbE/hEdPE2t4mjVUICCIIGqKoRPEIovunGeaNMZrqjxXtRlRbtpfafenwwI78PT7gIz7hM3vhT3jGV3zDd/zAT7zgF37jj7y9N0g1
+AQAAACgAAAAoAAAAFwAAAA==eJxjYEAGF+wh9AMo/QJKf7AHADzEBIU=
 </DataArray>
         <DataArray type="Float64" Name="y" format="binary" NumberOfComponents="1">
-AQAAAMgAAADIAAAAVwAAAA==eJwtyTEKgDAQRNHcbE/hEdPE2t4mjVUICCIIGqKoRPEIovunGeaNMZrqjxXtRlRbtpfafenwwI78PT7gIz7hM3vhT3jGV3zDd/zAT7zgF37jj7y9N0g1
+AQAAACgAAAAoAAAAFwAAAA==eJxjYEAGF+wh9AMo/QJKf7AHADzEBIU=
 </DataArray>
         <DataArray type="Float64" Name="z" format="binary" NumberOfComponents="1">
 AQAAAAgAAAAIAAAACwAAAA==eJxjYIAAAAAIAAE=
@@ -15,13 +15,13 @@ AQAAAAgAAAAIAAAACwAAAA==eJxjYIAAAAAIAAE=
       </Coordinates>
       <PointData>
         <DataArray type="Float64" Name="Density" format="binary" NumberOfComponents="1">
-AQAAAIgTAACIEwAAJQAAAA==eJztxTERAAAIBCA/mf3bGMEzhBsspM50bNu2bdu2bb+9USTmTw==
+AQAAAMgAAADIAAAAEQAAAA==eJxjZACBD/aMQ5wGAFk8HbE=
 </DataArray>
         <DataArray type="Float64" Name="y-Velocity" format="binary" NumberOfComponents="1">
-AQAAAIgTAACIEwAAJAAAAA==eJztxTERAAAIBKBidrP56xnCDRYypyu2bdu2bdu2317Izl5l
+AQAAAMgAAADIAAAAEQAAAA==eJz79x8E6m3+DXEaAC/Pp5U=
 </DataArray>
         <DataArray type="Float64" Name="x-Velocity" format="binary" NumberOfComponents="1">
-AQAAAIgTAACIEwAAJAAAAA==eJztxTERAAAIBKBidrP56xnCDRYypyu2bdu2bdu2317Izl5l
+AQAAAMgAAADIAAAAEQAAAA==eJz79x8E6m3+DXEaAC/Pp5U=
 </DataArray>
       </PointData>
     </Piece>

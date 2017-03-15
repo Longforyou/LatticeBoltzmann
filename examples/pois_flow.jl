@@ -4,7 +4,7 @@ using Plots, LatticeBoltzmann,
     LatticeBoltzmann._D2Q9
 
 # Grid example
-scale = 5
+scale = 1
 x = 5 * scale
 y = 5 * scale
 t =  2. * x
