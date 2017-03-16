@@ -22,10 +22,9 @@ immutable D2Q9{F<:Flow} <: _2D
 
     D2Q9() = (
       # Some constant fields
-      new(Array{Float64, 1}(
-      Array{Float64, 1}([4/9, 1/9, 1/9, 1/9, 1/9, 1/36, 1/36, 1/36, 1/36]),
-          Dict{DataType, Array{Int64, 1}}([(North, [3, 6, 7]), (South, [5, 8, 9]),
-                (West, [4, 7, 8]), (East, [2, 6, 9])]))
+      new(Array{Float64, 1}([4/9, 1/9, 1/9, 1/9, 1/9, 1/36, 1/36, 1/36, 1/36]),
+          Dict{DataType, Array{Int64, 1}}([(North, [3, 6, 7]),
+           (South, [5, 8, 9]), (West, [4, 7, 8]), (East, [2, 6, 9])]))
     )
 
   end
@@ -48,10 +47,6 @@ end
 
 end # module _D2Q9
 
-# Include the 2D velocity sets
-# include("velocity_2d.jl"); export _D2Q9
-
-# TODO 3d velocity sets
 
 using ._D2Q9
 

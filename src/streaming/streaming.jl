@@ -11,14 +11,10 @@ immutable FullPeriodicStreaming_2D <: Streaming
 
 end
 
-abstract InnerStreaming <: Streaming
-
 # =========== Streaming
 function compute_streaming!(grid::Grid, stream::Array{Streaming, 1}, velset::Velocity_Set)
     for stre in stream
-        # println("Pre ", stre, "\nPopulation\n", grid.f_prop)
         @inbounds streaming!(stre, grid, velset)
-        # println("Post ", stre, "\nPopulation\n", grid.f_prop)
     end
 end
 

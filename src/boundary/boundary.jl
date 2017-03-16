@@ -38,7 +38,4 @@ export
     Dirichlet,
     Bounce,
     Corner,
-    OpenBounce,
-    FullPeriodicStreaming_2D,
-    PressurePeriodicStream_2D,
-    PressurePeriodic_2D
+    OpenBounce

@@ -8,11 +8,6 @@ type Corner{V <: _2D} <: Boundary
   quadrant::UInt8
   rho::Float64 # Specifies density/ pressure at the corner
 
-  # Corner{V}(row, col, quad, rho) =
-  #   (
-  #    assert(quad in Array{UInt8}([1, 2, 3, 4])); # Check the quadrant
-  #    new(row, col, quad, rho)
-  #  )
 end
 
 # ============================================================
