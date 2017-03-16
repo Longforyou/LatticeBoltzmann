@@ -67,7 +67,7 @@ y_vec ./= y
 m_uvec = uvec[indmax(uvec)]
 uvec ./= m_uvec
 
-plot(y_vec, uvec, xlabel="y / y_max", ylabel="U_x/ U_max", label="analy",
+plot(y_vec, uvec, xlabel="y / y_max", ylabel="U_x/ U_max", label="analytical",
      title="Analytical vs Numeric Pois")
 plot!(y_vec,  grid.velocity[Int64(x), :, 2]./m_uvec ./grid.density[Int64(x), :], label="AuslassLBM Loesung")
 #plot!(y_vec,  grid.velocity[Int64(x/2), :, 2]./m_uvec, label="Mitte LBM Loesung")

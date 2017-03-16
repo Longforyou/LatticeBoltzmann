@@ -33,6 +33,7 @@ for i = 1:6
                         L, H, tau1)
 end
 
+println("Constants\n", const_vec)
 # Create all objects for the LBM ( Grid needs only one arbitray LBM_Constants object for initialising the x, y values)
 grid = Grid_2D(const_vec[1], x, y, 9)
 
@@ -72,14 +73,70 @@ end
 # Analytical solution
 y_vec = Array{Float64}(1:y) - 0.5
 
-plot(xlabel="t", yaxis=("L^2 Error"), title="Error in respect to time")
+# Plot all 6 values
+# ===== 1
+uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[1], y_vec)
+# Norm the results
+y_vec ./= y
+m_uvec = const_vec[1].U
+uvec ./= m_uvec
+p1 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution", const_vec[1].U))
+plot!(p1, y_vec, uvec, label="analytical")
+plot!(p1, y_vec, pois_compr(const_vec[1], grid, d2q9, t) ./ m_uvec, label=const_vec[1].U)
 
-for const_i in const_vec
 
-    uvec = get_velo_pois_2(Float64(x), Float64(y), const_i, y_vec)
-    plot!(t_vec, pois_compr(const_i, grid, d2q9, t), label=const_i.U)
-end
+y_vec = Array{Float64}(1:y) - 0.5
+uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[2], y_vec)
+# Norm the results
+y_vec ./= y
+m_uvec = const_vec[2].U
+uvec ./= m_uvec
+p2 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution_", const_vec[2].U))
+plot!(p2, y_vec, uvec, label="analytical")
+plot!(p2, y_vec, pois_compr(const_vec[2], grid, d2q9, t) ./ m_uvec, label=const_vec[2].U)
 
+y_vec = Array{Float64}(1:y) - 0.5
+uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[3], y_vec)
+# Norm the results
+y_vec ./= y
+m_uvec = const_vec[3].U
+uvec ./= m_uvec
+p3 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution_", const_vec[3].U))
+plot!(p3, y_vec, uvec, label="analytical")
+plot!(p3, y_vec, pois_compr(const_vec[3], grid, d2q9, t) ./ m_uvec, label=const_vec[3].U)
+
+y_vec = Array{Float64}(1:y) - 0.5
+uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[4], y_vec)
+# Norm the results
+y_vec ./= y
+m_uvec = const_vec[4].U
+uvec ./= m_uvec
+p4 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution_", const_vec[4].U))
+plot!(p4, y_vec, uvec, label="analytical")
+plot!(p4, y_vec, pois_compr(const_vec[4], grid, d2q9, t) ./ m_uvec, label=const_vec[4].U)
+
+y_vec = Array{Float64}(1:y) - 0.5
+uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[5], y_vec)
+# Norm the results
+y_vec ./= y
+m_uvec = const_vec[5].U
+uvec ./= m_uvec
+p5 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution_", const_vec[5].U))
+plot!(p5, y_vec, uvec, label="analytical")
+plot!(p5, y_vec, pois_compr(const_vec[5], grid, d2q9, t) ./ m_uvec, label=const_vec[5].U)
+
+y_vec = Array{Float64}(1:y) - 0.5
+uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[6], y_vec)
+# Norm the results
+y_vec ./= y
+m_uvec = const_vec[6].U
+uvec ./= m_uvec
+p6 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution_", const_vec[6].U))
+plot!(p6, y_vec, uvec, label="analytical")
+plot!(p6, y_vec, pois_compr(const_vec[6], grid, d2q9, t) ./ m_uvec, label=const_vec[6].U)
+
+plot(p1, p2, p3, p4, p5, p6)
+# Saving..
 savefig("pois_velo_diff.eps")
 
 show()
