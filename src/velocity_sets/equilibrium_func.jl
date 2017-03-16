@@ -1,28 +1,41 @@
 #! /usr/bin/env julia
 
-# """
-# This file contains a description of usefull function
-#  for the computation of the equilibrium function
-# """
-# =========== Equilibrium Distribution function
+"""
+    compute_f_eq!(grid, velset)
+
+Compute the equilibrium equation for each node in the
+grid. 
+"""
 function compute_f_eq!(grid::Grid_2D, velset::_2D)
     @inbounds @fastmath f_eq!(grid.f_eq, velset, grid.density, grid.velocity)
 end
 
-function f_eq!(grid_f_eq::Array{Float64, 3}, d2q9::D2Q9,
+"""
+    f_eq!(grid_f_eq, velset, rho, velo)
+
+Interface function to the kernel function `f_eq_kernel`.
+Performace the actual iteration over the grid.
+"""
+function f_eq!(grid_f_eq::Array{Float64, 3}, velset::_2D,
               rho::Array{Float64, 2}, velo::Array{Float64, 3})
 
     sz_grid = size(grid_f_eq)
 
     for i = 1:sz_grid[1]
         for j = 1:sz_grid[2]
-            grid_f_eq[i, j, :] = f_eq_kernel!(grid_f_eq[i, j, :], rho[i, j], velo[i, j, 1],
-                         velo[i, j, 2], d2q9)
+            grid_f_eq[i, j, :] =
+                f_eq_kernel!(grid_f_eq[i, j, :], rho[i, j], velo[i, j, 1],
+                         velo[i, j, 2], velset)
         end # j
     end # i
 end # f_eq
 
-# For the boundary compuations
+"""
+    f_eq(d2q9, rho, velo)
+
+Interface function to the kernel function `f_eq_kernel` for
+a subset of particles. Useful for computing boudary conditions.
+"""
 function f_eq(d2q9::D2Q9, rho::Float64, velo::Array{Float64, 2})
 
     sz_grid = size(velo)

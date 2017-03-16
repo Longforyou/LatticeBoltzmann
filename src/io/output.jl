@@ -5,6 +5,13 @@ This file contains the description of function relating to the vtr output file w
 
 # =========== Output file writing
 
+"""
+    write_vtk(grid, name, step)
+
+Writes the current status of the macroskopic variables
+into a .vtr file. Julia uses column based storing of
+the data. X & Y direction have to be swapped.
+"""
 function write_vtk(grid::Grid_2D, name::String, step::Int64)
     # Idea write the values of the particles in to arrays
     # and write them into the file.
@@ -16,8 +23,6 @@ function write_vtk(grid::Grid_2D, name::String, step::Int64)
 
     vtk_point_data(vtk_f, grid.density, "Density")
     vtk_velocity = grid.velocity ./ grid.density
-
-    #println("VTK_Velocity: ", vtk_velocity)
 
     # Velocities are swapped! Since julia uses column major formats..
     vtk_point_data(vtk_f, vtk_velocity[:, :, 1], "y-Velocity")

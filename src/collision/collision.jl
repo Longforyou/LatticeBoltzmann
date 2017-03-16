@@ -1,10 +1,8 @@
 #! /usr/bin/env julia
 
 """
-This module contains the description of collision operators.
-Eg. the Bhatnagar-Gross-Kroog operator
+Type for the description of the BGK collision operator.
 """
-
 immutable BGK <: Collision
     omega::Float64
 
@@ -15,8 +13,13 @@ immutable BGK <: Collision
     end
 end
 
-# ===============
-function compute_collision!(grid::Grid_2D, collision::Collision)
+"""
+    compute_collision(grid, collision)
+
+Interface function for the computation of different
+collision operators via a dispatch function `collide`.
+"""
+function compute_collision!(grid::Grid, collision::Collision)
 
     # The collision of the particles is indepentend of
     # the particle type
@@ -24,10 +27,12 @@ function compute_collision!(grid::Grid_2D, collision::Collision)
 
 end
 
-# """
-# The BGK-Operator relaxates the population 'f_prop'
-#  to a equilibrium function.
-# """
+"""
+    collide(bgk, grid)
+
+The BGK-Operator relaxates the population `f_prop`
+ to a equilibrium function `f_eq`.
+"""
 function collide(bgk::BGK, grid::Grid_2D)
     return grid.f_prop .* (1. - bgk.omega) .+
         grid.f_eq .* bgk.omega

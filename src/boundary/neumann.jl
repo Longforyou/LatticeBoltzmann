@@ -3,7 +3,14 @@
 using ._D2Q9
 
 # ====== Neumann conditions
-# The generic type T, allows for different equilibirum implementations
+
+"""
+    Neumann{T<:Direction, S<:SolType, V<:Velocity_Set}
+
+Definition of a Neumann-Boundary-Condition. Contains three
+parametric types for dispatching on different implementations.
+TODO implement differeny SolTypes
+"""
 immutable Neumann{T<:Direction, S<:SolType,
                   V <: Velocity_Set} <: Boundary
   vel::Float64
@@ -12,11 +19,16 @@ immutable Neumann{T<:Direction, S<:SolType,
 
 end
 
-# Define a functor for the bondary
+"""
+    compute_neumann{T<:Direction}(V, f_i, post_ind, pre_ind, vel_ind, sign)
+
+Kernel function for the computation of the Neumann-Computation for a
+Non-Equilibrium Ansatz. 
+"""
 function compute_neumann{T<:Direction}(V::Neumann{T, NonEqBounce, D2Q9},
                          f_i::Array{Float64, 1},
-                        pre_ind::Array{Int64, 1},
                         post_ind::Array{Int64, 1},
+                        pre_ind::Array{Int64, 1},
                         vel_ind::Array{Int64, 1},
                          sign::Bool)
 
@@ -49,15 +61,21 @@ function compute_neumann{T<:Direction}(V::Neumann{T, NonEqBounce, D2Q9},
   return f_i
 end
 
-# Neumann solution schemes for D2Q9
+"""
+    boundary(grid, bound::Neumann{T<:Direction, NonEqBounce, D2Q9})
+
+Implementation of the interface function for the
+computation of the neumann boundary condition. Dispath
+over the direction.
+"""
 function boundary(grid::Grid_2D,
                   bound::Neumann{North, NonEqBounce,
-                                 D2Q9}, velset::_2D)
+                                 D2Q9}, d2q9::D2Q9)
   
     for row in bound.rows, col in bound.cols
       # Call the generic function
-      grid.f_temp[row, col, :] =
-          bound(grid.f_temp[row, col, :],
+      grid.f_prop[row, col, :] =
+            compute_neumann(bound, grid.f_temp[row, col, :],
                           bound.vel, velset.dict[South], velset.dict[North],
                           [1, 2, 4], true )
     end 
@@ -69,9 +87,9 @@ function boundary(grid::Grid_2D, bound::Neumann{South, NonEqBounce,
   
   for row in bound.rows, col in bound.cols
     # Call the generic function
-    grid.f_temp[row, col, :] =
-        bound(grid.f_temp[row, col, :],
-                        bound.vel, [3, 6, 7], [5, 8, 9],
+    grid.f_prop[row, col, :] =
+            compute_neumann(bound, grid.f_temp[row, col, :],
+                        bound.vel, velset.dict[North], velset.dict[South],
                         [1, 2, 4], false)
   end
 
@@ -79,12 +97,12 @@ end
 
 function boundary!(grid::Grid_2D,
                   bound::Neumann{West, NonEqBounce,
-                                 D2Q9}, velset::_2D)
+                                 D2Q9}, d2q9::D2Q9)
   
     for row in bound.rows, col in bound.cols
       # Call the generic function
         grid.f_prop[row, col, :] =
-            compute_neumann(bound, grid.f_prop[row, col, :],
+            compute_neumann(bound, grid.f_temp[row, col, :],
                             velset.dict[East], velset.dict[West],
                             [1, 3, 5], false)
     end
@@ -92,16 +110,16 @@ function boundary!(grid::Grid_2D,
 
 end
 
-function boundary(grid::Grid_2D, 
-                  bound::Neumann{Direction, NonEqBounce,
-                                 D2Q9})
- 
-  for row in bound.rows, col in bound.cols
-    # Call the generic function
-    grid.f_temp[row, col, :] =
-        bound(grid.f_temp[row, col, :], true)
-   
-  end 
+function boundary!(grid::Grid_2D,
+                  bound::Neumann{East, NonEqBounce,
+                                 D2Q9}, d2q9::D2Q9)
+  
+    for row in bound.rows, col in bound.cols
+      # Call the generic function
+        grid.f_prop[row, col, :] =
+            compute_neumann(bound, grid.f_temp[row, col, :],
+                            velset.dict[West], velset.dict[East],
+                            [1, 3, 5], false)
+    end
 
 end
-

@@ -29,7 +29,12 @@ immutable D2Q9{F<:Flow} <: _2D
 
   end
 
+"""
+    velo_1(f_prop)
 
+Computes the first velocity component for the passed
+9 valued distribution function.
+"""
 function velo_1(f_prop::Array{Float64, 1})
 
     return f_prop[2] + f_prop[6] + f_prop[9] -
@@ -37,6 +42,12 @@ function velo_1(f_prop::Array{Float64, 1})
 
 end
 
+"""
+    velo_2(f_prop)
+
+Computes the second velocity component for the passed
+9 valued distribution function.
+"""
 function velo_2(f_prop::Array{Float64, 1})
     return f_prop[3] + f_prop[6] + f_prop[7] -
         f_prop[5] - f_prop[8] - f_prop[9]
@@ -47,6 +58,9 @@ end
 
 end # module _D2Q9
 
+# Include the 2D velocity sets
+# include("velocity_2d.jl"); export _D2Q9
+# TODO 3d velocity sets
 
 using ._D2Q9
 

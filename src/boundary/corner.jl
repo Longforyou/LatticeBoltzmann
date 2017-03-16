@@ -1,20 +1,42 @@
+#! /usr/bin/env julia
 
-# The corners are modelling different quadrant for the grid. By the type of the
-# corner 1 - 4
-type Corner{V <: _2D} <: Boundary
+abstract Corner <: Boundary
+
+"""
+    Corner{V<:_2D}
+
+Modelling of a corner for the 2D case. Assertion is done, since
+there are only 4 possible cases. Pass a UInt8 out of [1, 2, 3, 4]
+ corner 1 - 4
+"""
+immutable Corner_2D{V <: _2D} <: Corner
 
   row::Int64
   col::Int64
   quadrant::UInt8
   rho::Float64 # Specifies density/ pressure at the corner
 
+<<<<<<< HEAD
+=======
+  Corner_2D(row, col, quad, rho) =
+    (
+     assert(quad in Array{UInt8}([1, 2, 3, 4])); # Check the quadrant
+     new(row, col, quad, rho)
+   )
+>>>>>>> cd15aaf99060e3be94c3a55172a2b8dc94a8fa6c
 end
 
 # ============================================================
 # ==== Corners
 # ============================================================
-# TODO Change the indices
-function boundary(grid::Grid_2D, bound::Corner{D2Q9})
+
+"""
+    boundary(grid, bound::Corner)
+
+Implementation of the interface function for the computation of the
+corner boundary condition. 
+"""
+function boundary(grid::Grid_2D, bound::Corner_2D{D2Q9})
 
   for row in bound.row, col in bound.col
     # Convenience pointer
