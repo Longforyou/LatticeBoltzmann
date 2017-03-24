@@ -8,7 +8,7 @@ scale = 10
 x = 20 * scale
 y = 5 * scale
 t =  40. * x
-write_inc = 0 # After 50 Iter a file is created
+write_inc = 5 # After 50 Iter a file is created
 U = Array(linspace(0.1, 0.3, 6))
 H = 4.
 L = 1. * H
@@ -70,7 +70,7 @@ end
 
 
 
-# Analytical solution
+# Analytisch solution
 y_vec = Array{Float64}(1:y) - 0.5
 
 # Plot all 6 values
@@ -80,9 +80,9 @@ uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[1], y_vec)
 y_vec ./= y
 m_uvec = const_vec[1].U
 uvec ./= m_uvec
-p1 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution", const_vec[1].U))
-plot!(p1, y_vec, uvec, label="analytical")
-plot!(p1, y_vec, pois_compr(const_vec[1], grid, d2q9, t) ./ m_uvec, label=const_vec[1].U)
+p1 = plot(xlabel="y", yaxis="U_x", title=string("LBM_Lösung", const_vec[1].U))
+plot!(p1, y_vec, uvec, label="analytisch")
+plot!(p1, y_vec, pois_compr(const_vec[1], grid, d2q9, t) ./ m_uvec, label=string("U: ", const_vec[1].U))
 
 
 y_vec = Array{Float64}(1:y) - 0.5
@@ -91,9 +91,9 @@ uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[2], y_vec)
 y_vec ./= y
 m_uvec = const_vec[2].U
 uvec ./= m_uvec
-p2 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution_", const_vec[2].U))
-plot!(p2, y_vec, uvec, label="analytical")
-plot!(p2, y_vec, pois_compr(const_vec[2], grid, d2q9, t) ./ m_uvec, label=const_vec[2].U)
+p2 = plot(xlabel="y", yaxis="U_x", title=string("U=", const_vec[2].U))
+plot!(p2, y_vec, uvec, label="analytisch")
+plot!(p2, y_vec, pois_compr(const_vec[2], grid, d2q9, t) ./ m_uvec, label=string("U: ", const_vec[2].U))
 
 y_vec = Array{Float64}(1:y) - 0.5
 uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[3], y_vec)
@@ -101,9 +101,9 @@ uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[3], y_vec)
 y_vec ./= y
 m_uvec = const_vec[3].U
 uvec ./= m_uvec
-p3 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution_", const_vec[3].U))
-plot!(p3, y_vec, uvec, label="analytical")
-plot!(p3, y_vec, pois_compr(const_vec[3], grid, d2q9, t) ./ m_uvec, label=const_vec[3].U)
+p3 = plot(xlabel="y", yaxis="U_x", title=string("U=", const_vec[3].U))
+plot!(p3, y_vec, uvec, label="analytisch")
+plot!(p3, y_vec, pois_compr(const_vec[3], grid, d2q9, t) ./ m_uvec, label=string("U: ", const_vec[3].U))
 
 y_vec = Array{Float64}(1:y) - 0.5
 uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[4], y_vec)
@@ -111,9 +111,9 @@ uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[4], y_vec)
 y_vec ./= y
 m_uvec = const_vec[4].U
 uvec ./= m_uvec
-p4 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution_", const_vec[4].U))
-plot!(p4, y_vec, uvec, label="analytical")
-plot!(p4, y_vec, pois_compr(const_vec[4], grid, d2q9, t) ./ m_uvec, label=const_vec[4].U)
+p4 = plot(xlabel="y", yaxis="U_x", title=string("U=", const_vec[4].U))
+plot!(p4, y_vec, uvec, label="analytisch")
+plot!(p4, y_vec, pois_compr(const_vec[4], grid, d2q9, t) ./ m_uvec, label=string("U: ", const_vec[4].U))
 
 y_vec = Array{Float64}(1:y) - 0.5
 uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[5], y_vec)
@@ -121,9 +121,9 @@ uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[5], y_vec)
 y_vec ./= y
 m_uvec = const_vec[5].U
 uvec ./= m_uvec
-p5 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution_", const_vec[5].U))
-plot!(p5, y_vec, uvec, label="analytical")
-plot!(p5, y_vec, pois_compr(const_vec[5], grid, d2q9, t) ./ m_uvec, label=const_vec[5].U)
+p5 = plot(xlabel="y", yaxis="U_x", title=string("U=", const_vec[5].U))
+plot!(p5, y_vec, uvec, label="analytisch")
+plot!(p5, y_vec, pois_compr(const_vec[5], grid, d2q9, t) ./ m_uvec, label=string("U: ", const_vec[5].U))
 
 y_vec = Array{Float64}(1:y) - 0.5
 uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[6], y_vec)
@@ -131,9 +131,9 @@ uvec = get_velo_pois_2(Float64(x), Float64(y), const_vec[6], y_vec)
 y_vec ./= y
 m_uvec = const_vec[6].U
 uvec ./= m_uvec
-p6 = plot(xlabel="y", yaxis="U_x", title=string("LBM-Solution_", const_vec[6].U))
-plot!(p6, y_vec, uvec, label="analytical")
-plot!(p6, y_vec, pois_compr(const_vec[6], grid, d2q9, t) ./ m_uvec, label=const_vec[6].U)
+p6 = plot(xlabel="y", yaxis="U_x", title=string("U=", const_vec[6].U))
+plot!(p6, y_vec, uvec, label="analytisch")
+plot!(p6, y_vec, pois_compr(const_vec[6], grid, d2q9, t) ./ m_uvec, label=string("U: ", const_vec[6].U))
 
 plot(p1, p2, p3, p4, p5, p6)
 # Saving..

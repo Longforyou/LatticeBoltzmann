@@ -30,7 +30,6 @@ include("dirichlet.jl")
 include("open.jl")
 include("bounce.jl")
 include("corner.jl")
-include("periodic_dirichlet.jl")
 
 export
     Boundary,

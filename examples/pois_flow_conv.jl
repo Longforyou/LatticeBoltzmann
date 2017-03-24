@@ -8,7 +8,7 @@ scale = 10
 x = 20 * scale
 y = 5 * scale
 t =  40. * x
-write_inc = 0 # After 50 Iter a file is created
+write_inc = 5 # After 50 Iter a file is created
 U = 0.1 
 H = 4.
 L = 1. * H
@@ -75,7 +75,7 @@ end
 # Analytical solution
 y_vec = Array{Float64}(1:y) - 0.5
 
-plot(xlabel="t", yaxis=(:log, "L^2 Error"), title="Error in respect to time")
+plot(xlabel="t", yaxis=(:log, "L^2 Error"), title="Fehler im Verlauf der Zeit")
 
 for const_i in const_vec
 

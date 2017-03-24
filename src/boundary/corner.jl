@@ -16,14 +16,11 @@ immutable Corner_2D{V <: _2D} <: Corner
   quadrant::UInt8
   rho::Float64 # Specifies density/ pressure at the corner
 
-<<<<<<< HEAD
-=======
   Corner_2D(row, col, quad, rho) =
     (
      assert(quad in Array{UInt8}([1, 2, 3, 4])); # Check the quadrant
      new(row, col, quad, rho)
    )
->>>>>>> cd15aaf99060e3be94c3a55172a2b8dc94a8fa6c
 end
 
 # ============================================================

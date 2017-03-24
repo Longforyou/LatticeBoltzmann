@@ -7,19 +7,12 @@ using Plots, LatticeBoltzmann,
 scale = 10
 x = 20 * scale
 y = 5 * scale
-<<<<<<< HEAD
 t =  40. * x
-write_inc = 0 #:w20 # After 50 Iter a file is created
+write_inc = 5 # After ~ Iter a file is created
 U = 0.1 
 H = 4.
 L = 1. * H
-=======
-t =  8e2 * x
-write_inc = 0 #:w20 # After 50 Iter a file is created
-U = 0.1 
-H = 1.
-L = 4. * H
->>>>>>> cd15aaf99060e3be94c3a55172a2b8dc94a8fa6c
+
 nu_luft = 153.2e-7
 mu_luft = 12.205e-6
 rho_luft = 1.189
@@ -76,7 +69,7 @@ m_uvec = uvec[indmax(uvec)]
 uvec ./= m_uvec
 
 plot(y_vec, uvec, xlabel="y / y_max", ylabel="U_x/ U_max", label="analytical",
-     title="Analytical vs Numeric Pois")
+     title="Analytische Lösung vs. LBM Lösung")
 plot!(y_vec,  grid.velocity[Int64(x), :, 2]./m_uvec ./grid.density[Int64(x), :], label="AuslassLBM Loesung")
 #plot!(y_vec,  grid.velocity[Int64(x/2), :, 2]./m_uvec, label="Mitte LBM Loesung")
 plot!(y_vec,  grid.velocity[Int64(1), :, 2]./m_uvec ./grid.density[Int64(x), :], label="Einlass LBM Loesung")

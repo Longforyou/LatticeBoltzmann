@@ -1,7 +1,4 @@
 #! /usr/bin/env julia
-"""
-This file contains the description of function relating to the vtr output file writing
-"""
 
 # =========== Output file writing
 

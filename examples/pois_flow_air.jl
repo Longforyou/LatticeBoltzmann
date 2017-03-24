@@ -7,8 +7,8 @@ using Plots, LatticeBoltzmann,
 scale = 10
 x = 20 * scale
 y = 5 * scale
-t =  40. * x
-write_inc = 0 #:w20 # After 50 Iter a file is created
+t =  80. * x
+write_inc = 5 #:w20 # After 50 Iter a file is created
 U = 0.1 
 H = 4.
 L = 1. * H
@@ -68,7 +68,7 @@ m_uvec = uvec[indmax(uvec)]
 uvec ./= m_uvec
 
 plot(y_vec, uvec, xlabel="y / y_max", ylabel="U_x/ U_max", label="analytical",
-     title="Analytical vs Numeric Pois")
+     title="Analytische Lösung vs. LBM Lösung")
 plot!(y_vec,  grid.velocity[Int64(x), :, 2]./m_uvec ./grid.density[Int64(x), :], label="AuslassLBM Loesung")
 #plot!(y_vec,  grid.velocity[Int64(x/2), :, 2]./m_uvec, label="Mitte LBM Loesung")
 plot!(y_vec,  grid.velocity[Int64(1), :, 2]./m_uvec ./grid.density[Int64(x), :], label="Einlass LBM Loesung")
