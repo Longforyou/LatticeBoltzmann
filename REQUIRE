@@ -1,4 +1,7 @@
 julia 0.5
 WriteVTK
 ProgressMeter
-ParallelAccelerator
+Interpolations
+HDF5
+RegionTrees
+GeometryTypes
