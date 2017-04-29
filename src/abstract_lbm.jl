@@ -9,8 +9,11 @@ module Abstract_LBM
 # The following three type specify a LBM modell
 abstract Collision 
 abstract Streaming
-abstract Velocity_Set
-abstract Flow
+abstract Velocity_Set # Models for different lattice stars
+abstract Population_Set
+abstract Flow  # What kind of flow 
+abstract AbstractDomain
+abstract AbstractBlock
 
 # Boundary conditions are modeled onto a LBM type, since the modify the LBM.
 abstract Direction
@@ -35,6 +38,9 @@ export
     Collision,
     Streaming,
     Grid, Velocity_Set,
+    AbstractBlock,
+    AbstractDomain,
+    Population_Set,
     _1D,_2D, _3D,
     Flow, Direction,
     North, South,
