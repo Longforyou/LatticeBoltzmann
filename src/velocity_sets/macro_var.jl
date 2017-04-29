@@ -23,13 +23,14 @@ optimization of the code (division is expensive).
 """
 function compute_macro_var!(grid::Grid_2D, velset::_2D)
 
-    for i = 1:grid.width
-        for j = 1:grid.length
-         @inbounds @fastmath grid.density[i, j] = density(grid.f_prop[i, j, :])
-         @inbounds @fastmath grid.velocity[i, j, 1] = _D2Q9.velo_1(grid.f_prop[i, j, :])
-         @inbounds @fastmath grid.velocity[i, j, 2] = _D2Q9.velo_2(grid.f_prop[i, j, :])
-        end
+    for i = 1:grid.width, j = 1:grid.length
+        @inbounds @fastmath grid.lattices[i, j] =
+            density(grid.lattices[i, j].f_prop))
+        @inbounds @fastmath  grid.lattices[i, j] =
+            velo!(grid.lattices[i, j], velset)
     end
+
+
 
 end
 

@@ -4,3 +4,4 @@
 /examples/*.vtr
 /examples/vtk/*.vtr
 /examples/*.png
+/examples/*.eps

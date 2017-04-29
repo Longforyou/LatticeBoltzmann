@@ -9,31 +9,32 @@ type Grid_2D <: Grid
     width::Int64
     length::Int64
     directions::Int64
-    f_prop::Array{Float64, 3}
-    f_eq::Array{Float64, 3}
-    f_temp::Array{Float64, 3}
-    density::Array{Float64,2}
-    velocity::Array{Float64,3}
+    lattices::Array{Lattice, 2}
 
     Grid_2D(consts::LBM_Constants, width::Int64,
             length::Int64, directions::Int64) =
         (
             (x, y) = get_axis_vec(width, length, consts);
-            f_prop = zeros(width, length, directions);
-            density = zeros(width, length); # Init with ones
-            velocity = zeros(width, length, 2);
-            f_eq = zeros(width, length, directions);
-            f_temp = zeros(width, length, directions);
-            new(x, y, width, length, directions, f_prop,  
-                f_eq, f_temp, density, velocity);
+            lattices = Array{Lattice}(width, length);
+            
+            for i = 1:width
+              for j = 1:length
+                lattices[i, j] = Lattice(directions, 2);
+              end
+            end;
+            new(x, y, width, length, directions, lattices);
         )
 end
 
-function get_next_index(grid::Grid, i::Int64, dir::Int64, c_s_i::Int64)
-    i_n = 1 + mod(i - 1 + c_s_i + size(grid.f_prop)[dir], size(grid.f_prop)[dir])
-
-    return i_n
+function get_next_index(grid::Grid_2D, i::Int64, dir::Int64)
+  
+    i < dir ? i + 1 : 1
 end
+
+function get_prev_index(grid::Grid_2D, i::Int64, dir::Int64)
+    i > 1 ? i - 1 : dir
+end
+
 
 function get_axis_vec(width, length, consts::LBM_Constants)
   x = linspace(0, width, width) * consts.phys_x / width
@@ -49,13 +50,15 @@ iteration.
 """
 function init_lattice_state!(grid::Grid_2D, velset::_2D)
 
+  println("INITIALISE LATTICE NODES...")
+  
   # The Initial values for the grid 
-  for k in 1:length(velset.w), i in 1:grid.width, j in 1:grid.length 
-    grid.f_eq[i, j, k] = velset.w[k]
+  for i in 1:grid.width, j in 1:grid.length 
+      grid.lattices[i, j].f_eq = copy(velset.w)
+      grid.lattices[i, j].f_temp = copy(velset.w)
+      grid.lattices[i, j].f_prop = copy(velset.w)
   end
 
-  grid.f_temp = grid.f_eq
-  grid.f_prop = grid.f_eq
   compute_macro_var!(grid, velset)
 
 end

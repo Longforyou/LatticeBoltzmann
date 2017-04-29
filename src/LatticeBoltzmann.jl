@@ -38,7 +38,6 @@ function compute!(grid::Grid, velset::Velocity_Set,
     println("Run a LatticeBoltzmann-Simulation with ",
             time_step, " step.")
   
-  println("INITIALISE LATTICE NODES...")
   init_lattice_state!(grid, velset)
 
   i = 1
@@ -53,7 +52,7 @@ function compute!(grid::Grid, velset::Velocity_Set,
         write_vtk(grid, name, 2)
     else
         cd(vtk_dir)
-        @showprogress 3 "Computing..." for i_stel = 1.:time_step
+        @showprogress 3 "Computing..." for i_step = 1.:time_step
             step!(grid, velset, collision, stream, bound)
 
             if i % write_inc == 0
@@ -143,7 +142,6 @@ scheme.
 function step!(grid::Grid, velset::Velocity_Set, collision::Collision,
               stream::Array{Streaming, 1}, bound::Array{Boundary, 1})
 
-
     compute_collision!(grid, collision)
     compute_streaming!(grid, stream, velset)
     compute_boundary!(grid, bound, velset)
@@ -152,6 +150,6 @@ function step!(grid::Grid, velset::Velocity_Set, collision::Collision,
 
 end
 
-export compute!
+export compute!, get_lattice_velocity
 
 end # module
