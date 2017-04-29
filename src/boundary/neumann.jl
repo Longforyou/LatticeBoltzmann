@@ -1,7 +1,5 @@
 #! /usr/bin/env julia
 
-using ._D2Q9
-
 # ====== Neumann conditions
 
 """

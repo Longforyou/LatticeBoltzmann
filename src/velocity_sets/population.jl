@@ -2,8 +2,8 @@
 
 
 
-immutable LatticePopulation{F <: Flow, N <: Int64} <: Population_Set
-    f_prop::SharedArray{Float64, N}
-    f_eq::SharedArray{Float64, N}
-    f_temp::Shared{Float64, N}
+immutable LatticePopulation{F <: Flow} <: Population_Set
+    f_prop::SharedArray{Lattice, N}
+    f_eq::SharedArray{Lattice, N}
+    f_temp::SharedArray{Lattice, N}
 end

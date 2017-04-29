@@ -12,4 +12,4 @@ immutable D2Q9{F<:Flow} <: _2D
            (South, [5, 8, 9]), (West, [4, 7, 8]), (East, [2, 6, 9])]))
     )
 
-  end
+ end

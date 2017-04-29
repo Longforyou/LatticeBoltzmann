@@ -1,5 +1,8 @@
 #! /usr/bin/env julia
 
+# Include all specific computations
+include("d2q9/macroval.jl")
+
 """
     density(f_prop)
 
@@ -24,13 +27,11 @@ optimization of the code (division is expensive).
 function compute_macro_var!(grid::Grid_2D, velset::_2D)
 
     for i = 1:grid.width, j = 1:grid.length
-        @inbounds @fastmath grid.lattices[i, j] =
-            density(grid.lattices[i, j].f_prop))
+        @inbounds @fastmath grid.lattices[i, j].density =
+            density(grid.lattices[i, j].f_prop)
         @inbounds @fastmath  grid.lattices[i, j] =
             velo!(grid.lattices[i, j], velset)
     end
-
-
 
 end
 

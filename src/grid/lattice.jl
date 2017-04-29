@@ -7,7 +7,7 @@ Contains a description of the type *Lattice*, which is a container for the popul
 All 
 """
 
-type Lattice <: Particle
+immutable Lattice <: Particle
     
     f_prop::Array{Float64, 1}
     f_eq::Array{Float64, 1}

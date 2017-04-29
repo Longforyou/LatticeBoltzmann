@@ -5,17 +5,18 @@
 
 Wrapper for the indices of a Bounceback condition on the domain.
 """
-immutable Bounce{T <: Direction, V<:Velocity_Set} <: Boundary rows::Array{Int64, 1}
+immutable Bounce{T <: Direction, V<:Velocity_Set} <: Boundary
+    rows::Array{Int64, 1}
     cols::Array{Int64, 1}
 end
 
 function bounce_lattice!(lattices::Array{Lattice}, bounce::Bounce,
-          to_arr::Array{Int64, 1}, from_arr::Array{Int64, 1})
+                         to_arr::Array{Int64, 1}, from_arr::Array{Int64, 1})
 
     for row in bounce.rows, col in bounce.cols, i in 1:size(to_arr)[1]
 
         lattices[row, col].f_prop[to_arr[i]] =
-            lattices[row, col].f_temp[from_arr[i]]::
+            lattices[row, col].f_temp[from_arr[i]]
     end
 end
 

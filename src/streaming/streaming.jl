@@ -138,10 +138,6 @@ function streaming!(PFPS::PressurePeriodicStream_2D{West, D2Q9}, grid::Grid_2D,
     # Compute the densities for the inlet and outlet,
     # where the pressure is known
 
-    # println("Streaming Peri Pres")
-    # println("PPre \n")
-    # print_lattice_f_temp(grid.lattices[PFPS.inlet_row, PFPS.inlet_col])
-    
     for i = 1:PFPS.length_col
         #Inlet
         periodic_pressure(grid, d2q9, 

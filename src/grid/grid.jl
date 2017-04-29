@@ -2,7 +2,7 @@
 
 using .Abstract_LBM
 
-type Grid_2D <: Grid
+immutable Grid_2D <: Grid
 
     x_point::Array{Float64, 1}
     y_point::Array{Float64, 1}
