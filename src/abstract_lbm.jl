@@ -1,19 +1,19 @@
 #! /usr/bin/env julia
 
-"""
-This files contains the abstract modelling of the lattice boltzmann method.
-It specifies abstract types, which are used in the function/ type definitions, includes after this files.
-"""
-module Abstract_LBM
+# This files contains the abstract modelling of the lattice boltzmann method.
+# It specifies abstract types, which are used in the function/ type definitions, includes after this files.
 
 # The following three type specify a LBM modell
 abstract Collision 
 abstract Streaming
 abstract Velocity_Set # Models for different lattice stars
-abstract Population_Set
 abstract Flow  # What kind of flow 
 abstract AbstractDomain
 abstract AbstractBlock
+abstract Geometry
+abstract GeomProperty <: Geometry
+abstract Solid <: Geometry
+abstract Virtual <: Geometry
 
 # Boundary conditions are modeled onto a LBM type, since the modify the LBM.
 abstract Direction
@@ -36,8 +36,6 @@ abstract Incompressible <: Flow
 abstract FullPeriodicStreaming <: Streaming
 abstract InnerStreaming <: Streaming
 
-abstract BGK <: Collision
-
 export
     Collision,
     Streaming,
@@ -54,4 +52,3 @@ export
     FullPeriodicStreaming,
     InnerStreaming, BGK
 
-end # module Abstract_LBM

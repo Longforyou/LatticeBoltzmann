@@ -1,7 +1,5 @@
 #! /usr/bin/env julia
 
-using .Abstract_LBM
-
 immutable Grid_2D <: Grid
 
     x_point::Array{Float64, 1}
