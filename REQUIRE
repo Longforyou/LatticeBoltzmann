@@ -1,7 +1,11 @@
 julia 0.5
 WriteVTK
+ClusterDicts
 ProgressMeter
 Interpolations
 HDF5
 RegionTrees
 GeometryTypes
+ParallelAccelerator
+StaticArrays
+RegionTrees

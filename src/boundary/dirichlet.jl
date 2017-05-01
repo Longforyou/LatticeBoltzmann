@@ -1,6 +1,5 @@
 #! /usr/bin/env julia
 
-
 abstract Dirichlet <: Boundary
 
 """

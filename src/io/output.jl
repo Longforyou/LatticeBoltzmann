@@ -18,17 +18,20 @@ function write_vtk(grid::Grid_2D, name::String, step::Int64)
     vtk_f = vtk_grid(file_name, grid.x_point,
                      grid.y_point, append=false)
 
-    vtk_point_data(vtk_f, grid.density, "Density")
-    vtk_velocity = grid.velocity ./ grid.density
-
-    # Velocities are swapped! Since julia uses column major formats..
-    vtk_point_data(vtk_f, vtk_velocity[:, :, 1], "y-Velocity")
-    vtk_point_data(vtk_f, vtk_velocity[:, :, 2], "x-Velocity")
+    vtk_density, vtk_x_vel, vtk_y_vel = get_macro_var(grid.lattices)
+    
+    vtk_point_data(vtk_f, vtk_density, "Density")
+    vtk_point_data(vtk_f, vtk_x_vel, "x-Velocity")
+    vtk_point_data(vtk_f, vtk_y_vel, "y-Velocity")
 
     vtk_save(vtk_f)
 
-end
+    # Free up the space
+    vtk_density = 0
+    vtk_x_vel = 0
+    vtk_y_vel = 0
 
+end
 
 # =========== Util functions ===========
 
