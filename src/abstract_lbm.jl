@@ -9,8 +9,8 @@ module Abstract_LBM
 # The following three type specify a LBM modell
 abstract Collision 
 abstract Streaming
-abstract Velocity_Set # Models for different lattice stars
-abstract Population_Set
+abstract VelocitySet # Models for different lattice stars
+abstract PopulationSet
 abstract Flow  # What kind of flow 
 abstract AbstractDomain
 abstract AbstractBlock
@@ -23,21 +23,24 @@ abstract West <: Direction
 abstract East <: Direction
 
 abstract Grid
-abstract _1D <: Velocity_Set
-abstract _2D <: Velocity_Set
-abstract _3D <: Velocity_Set
+abstract _1D <: VelocitySet
+abstract _2D <: VelocitySet
+abstract _3D <: VelocitySet
 
-abstract Compressible <: Flow
-abstract Incompressible <: Flow
+abstract SingleDistFlow <: Flow
+abstract Compressible <: SingleDistFlow
+abstract Incompressible <: SingleDistFlow
 abstract FullPeriodicStreaming <: Streaming
 abstract InnerStreaming <: Streaming
+
+abstract SinglePopulationSet <: PopulationSet
 
 abstract BGK <: Collision
 
 export
     Collision,
     Streaming,
-    Grid, Velocity_Set,
+    Grid, VelocitySet,
     AbstractBlock,
     AbstractDomain,
     Population_Set,
