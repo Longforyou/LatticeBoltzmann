@@ -5,3 +5,5 @@
 /examples/vtk/*.vtr
 /examples/*.png
 /examples/*.eps
+
+.vscode/
