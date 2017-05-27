@@ -1,5 +1,6 @@
 #! /usr/bin/env julia
 
+<<<<<<< HEAD
 immutable Grid_2D <: Grid
 
     x_point::Array{Float64, 1}
@@ -23,6 +24,10 @@ immutable Grid_2D <: Grid
             new(x, y, width, length, directions, lattices);
         )
 end
+=======
+using .Abstract_LBM
+
+>>>>>>> origin/dev2
 
 function get_next_index(grid::Grid_2D, i::Int64, dir::Int64)
   
@@ -42,6 +47,7 @@ function get_axis_vec(width, length, consts::LBM_Constants)
 
 end
 
+<<<<<<< HEAD
 """
 Compute the initial values of the grid. Gets called before the first normal
 iteration.
@@ -60,5 +66,11 @@ function init_lattice_state!(grid::Grid_2D, velset::_2D)
   compute_macro_var!(grid, velset)
 
 end
+=======
+include("population.jl")
+include("macro_var_block.jl")
+include("single_2d_grid.jl")
+>>>>>>> origin/dev2
 
-export Grid_2D
+export
+    SingleGrid2D
