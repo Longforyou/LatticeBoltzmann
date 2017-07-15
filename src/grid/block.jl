@@ -1,15 +1,18 @@
 #! usr/bin/julia
 
-immutable MultiBlock <: AbstractBlock
-    blocks::DistributedDict{Int64, Block{UInt8}}
+"""
+    Block{D <: UInt8, Q <: UInt8}
 
+A block contains the two arrays associated with every LBM simulation,
+the macroscopic variables and the lattice populations.
+"""
+mutable struct Block{D <: UInt8, Q <: UInt8} <: AbstractBlock
+    macroVar::Array{Float64, D}
+    populations::Array{Float64, Q}
 
 end
 
-immutable Block{N <: UInt8} <: AbstractBlock
-    grid::Array{Lattice, N}
-    neighbour::Array{Int64}
-    level::Int64
-    weight::Int64
+function computeNewWeight(block::Block, maxLvL::Int64)
+    return 2 ^ (block.weight - maxLvL)
 
 end

@@ -4,7 +4,8 @@ __precompile__()
 
 module LatticeBoltzmann
 
-using  ProgressMeter, WriteVTK #, ParallelAccelerator
+using  ProgressMeter, WriteVTK
+using StructOfArrays
 
 
 # Process all other files

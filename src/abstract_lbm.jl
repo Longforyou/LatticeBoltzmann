@@ -4,60 +4,50 @@
 # It specifies abstract types, which are used in the function/ type definitions, includes after this files.
 
 # The following three type specify a LBM modell
-abstract Collision 
-abstract Streaming
-<<<<<<< HEAD
-abstract Velocity_Set # Models for different lattice stars
-=======
-abstract VelocitySet # Models for different lattice stars
-abstract PopulationSet
->>>>>>> origin/dev2
-abstract Flow  # What kind of flow 
-abstract AbstractDomain
-abstract AbstractBlock
-abstract Geometry
-abstract GeomProperty <: Geometry
-abstract Solid <: Geometry
-abstract Virtual <: Geometry
+abstract type Collision end
+abstract type Streaming end
+
+# Models for different lattice stars
+abstract type VelocitySet end
+abstract type Flow end  # What kind of flow
+
+abstract type Grid end
+abstract type AbstractPatch <: Grid end # For collecting blocks
+abstract type AbstractBlock <: Grid end # For containing populations
+
+abstract type Geometry end
+abstract type GeomProperty <: Geometry end
+abstract type Solid <: Geometry end
+abstract type Virtual <: Geometry end
 
 # Boundary conditions are modeled onto a LBM type, since the modify the LBM.
-abstract Direction
-abstract North <: Direction
-abstract South <: Direction
-abstract West <: Direction
-abstract East <: Direction
+abstract type Direction end
+abstract type North <: Direction end
+abstract type South <: Direction end
+abstract type West <: Direction end
+abstract type East <: Direction end
 
+abstract type _1D <: VelocitySet end
+abstract type _2D <: VelocitySet end
+abstract type _3D <: VelocitySet end
 
-# Grid is seperated into the two parts. The individual lattice and the grid which holds all lattices
-abstract Particle
+abstract type SingleDistFlow <: Flow end
+abstract type Compressible <: SingleDistFlow end
 
-abstract Grid
-abstract _1D <: VelocitySet
-abstract _2D <: VelocitySet
-abstract _3D <: VelocitySet
+abstract type Incompressible <: SingleDistFlow end
+abstract type FullPeriodicStreaming <: Streaming end
+abstract type InnerStreaming <: Streaming end
 
-abstract SingleDistFlow <: Flow
-abstract Compressible <: SingleDistFlow
-abstract Incompressible <: SingleDistFlow
-abstract FullPeriodicStreaming <: Streaming
-abstract InnerStreaming <: Streaming
+abstract type BGK <: Collision end
 
-<<<<<<< HEAD
 export
     Collision,
     Streaming,
     Particle,
     Grid, Velocity_Set,
-=======
-abstract SinglePopulationSet <: PopulationSet
-
-abstract BGK <: Collision
-
-export
     Collision,
     Streaming,
     Grid, VelocitySet,
->>>>>>> origin/dev2
     AbstractBlock,
     AbstractDomain,
     Population_Set,

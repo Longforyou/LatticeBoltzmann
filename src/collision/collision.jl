@@ -3,7 +3,7 @@
 """
 Type for the description of the BGK collision operator.
 """
-immutable BGK <: Collision
+mutable struct BGK <: Collision
     omega::Float64
 
     function BGK(consts::LBM_Constants)

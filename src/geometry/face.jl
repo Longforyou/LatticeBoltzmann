@@ -1,10 +1,10 @@
 #! usr/bin/julia
 
-immutable Face{T <: GeomProperty} <: Geometry
+struct Face{T <: GeomProperty} <: Geometry
     lines::Array{Line}
     angles::Array{Float64}
 
-    Face(lines::Array{Line}) = (
+    Face{T}(lines::Array{Line}) where {T <: GeomProperty}= (
         linelength = length(lines);
         assert(linelength >= 4);
         angles = zeros(linelength);
