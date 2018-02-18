@@ -1,5 +1,3 @@
-#! /usr/bin/env julia
-
 __precompile__()
 
 module LatticeBoltzmann
